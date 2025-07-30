@@ -23,18 +23,17 @@ function createUniversitySection(name) {
 }
 
 // Handle form submission
-form.addEventListener('submit', function (e) {
+form.addEventListener('submit', async function (e) {
   e.preventDefault();
   const data = new FormData(form);
   const cardData = Object.fromEntries(data.entries());
   cardData.initials = cardData.fullName.split(' ').map(n => n[0]).join('').toUpperCase();
   cardData.id = Date.now(); // Unique ID for deletion
 
-  // Save current user's email to know which card is theirs
   localStorage.setItem('myPortfolioOwner', cardData.email);
 
   addCardToFeed(cardData);
-  saveCard(cardData);
+  await saveCard(cardData);
 
   form.reset();
   closeModal();
@@ -42,7 +41,7 @@ form.addEventListener('submit', function (e) {
   feed.scrollIntoView({ behavior: 'smooth' });
 });
 
-// Display one card
+// Add one card to feed
 function addCardToFeed(data) {
   const { fullName, initials, university, program, year, bio, skills, projectTitle, projectDescription, email, linkedin, id } = data;
 
@@ -52,7 +51,7 @@ function addCardToFeed(data) {
 
   const card = document.createElement('div');
   card.className = 'profile-card';
-  card.dataset.id = id; // Attach ID to card element
+  card.dataset.id = id;
 
   card.innerHTML = `
     <div class="card-header">
@@ -91,7 +90,6 @@ function addCardToFeed(data) {
       <div class="actions">
         <button onclick="likeCard(this)">👍 Like</button>
         <button onclick="commentCard(this)">💬 Comment</button>
-        ${email === localStorage.getItem('myPortfolioOwner') ? `<button onclick="deleteCard(${id}, this)">🗑️ Delete</button>` : ''}
       </div>
     </div>
   `;
@@ -99,32 +97,36 @@ function addCardToFeed(data) {
   universitySections[university].prepend(card);
 }
 
-// Delete card and remove from localStorage
-function deleteCard(cardId, button) {
-  const saved = JSON.parse(localStorage.getItem('studentPortfolios')) || [];
-  const updated = saved.filter(entry => entry.id !== cardId);
-  localStorage.setItem('studentPortfolios', JSON.stringify(updated));
+// Save card to backend
+async function saveCard(cardData) {
+  try {
+    const res = await fetch('/api/cards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cardData)
+    });
 
-  const card = button.closest('.profile-card');
-  card.remove();
+    if (!res.ok) throw new Error('Failed to save card');
+    console.log("✅ Card saved to server!");
+  } catch (err) {
+    console.error("❌ Error saving card:", err);
+  }
 }
 
-// Save new card to localStorage
-function saveCard(data) {
-  const existing = JSON.parse(localStorage.getItem('studentPortfolios')) || [];
-  existing.push(data);
-  localStorage.setItem('studentPortfolios', JSON.stringify(existing));
+// Load all cards from backend
+async function loadSavedCards() {
+  try {
+    const res = await fetch('/api/cards');
+    if (!res.ok) throw new Error('Failed to fetch cards');
+    const cards = await res.json();
+
+    cards.forEach(addCardToFeed);
+  } catch (err) {
+    console.error("❌ Error loading cards:", err);
+  }
 }
 
-// Load all cards from localStorage
-function loadSavedCards() {
-  const saved = JSON.parse(localStorage.getItem('studentPortfolios')) || [];
-  saved.forEach(cardData => {
-    addCardToFeed(cardData);
-  });
-}
-
-// Like button handler
+// Like button
 function likeCard(button) {
   let count = button.dataset.count ? parseInt(button.dataset.count) : 0;
   count++;
@@ -132,28 +134,22 @@ function likeCard(button) {
   button.textContent = `👍 Like (${count})`;
 }
 
-// Comment button handler
+// Comment button
 function commentCard(button) {
   const comment = prompt("Leave a comment:");
   if (comment) alert(`You said: ${comment}`);
 }
 
-// Search input handler
+// Search
 searchInput.addEventListener('input', function () {
   const searchTerm = this.value.toLowerCase();
   const allCards = document.querySelectorAll('.profile-card');
 
   allCards.forEach(card => {
     const name = card.querySelector('.portfolio-name')?.textContent.toLowerCase() || '';
-    if (name.includes(searchTerm)) {
-      card.style.display = 'block';
-    } else {
-      card.style.display = 'none';
-    }
+    card.style.display = name.includes(searchTerm) ? 'block' : 'none';
   });
 });
 
-// Load cards when page is ready
-window.addEventListener('DOMContentLoaded', () => {
-  loadSavedCards();
-});
+// Load all saved cards when page loads
+window.addEventListener('DOMContentLoaded', loadSavedCards);
