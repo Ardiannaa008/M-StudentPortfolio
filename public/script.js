@@ -100,7 +100,7 @@ function addCardToFeed(data) {
 // Save card to backend
 async function saveCard(cardData) {
   try {
-    const res = await fetch('/api/cards', {
+    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cardData)
@@ -116,7 +116,7 @@ async function saveCard(cardData) {
 // Load all cards from backend
 async function loadSavedCards() {
   try {
-    const res = await fetch('/api/cards');
+    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards');
     if (!res.ok) throw new Error('Failed to fetch cards');
     const cards = await res.json();
 
