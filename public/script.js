@@ -32,8 +32,8 @@ form.addEventListener('submit', async function (e) {
 
   localStorage.setItem('myPortfolioOwner', cardData.email);
 
-  addCardToFeed(cardData);
   await saveCard(cardData);
+  loadSavedCards();
 
   form.reset();
   closeModal();
@@ -43,6 +43,8 @@ form.addEventListener('submit', async function (e) {
 
 // Add one card to feed
 function addCardToFeed(data) {
+  if (!data || !data.fullName) return;  // skip if no name
+
   const { fullName, initials, university, program, year, bio, skills, projectTitle, projectDescription, email, linkedin, id } = data;
 
   if (!universitySections[university]) {
