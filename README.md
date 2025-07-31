@@ -2,8 +2,6 @@
 
 **M-StudentPortfolio** is a web platform that allows university students worldwide to create and share their personal mini portfolios. It's designed to help students showcase their skills and interests, connect with peers from the same or different universities, and build a network of like-minded individuals.
 
-## 🌐 Live Website
-
 🔗 [Visit the Live Site](https://m-student-portfolio.vercel.app/)
 ---
 
