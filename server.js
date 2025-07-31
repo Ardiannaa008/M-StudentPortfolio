@@ -53,7 +53,11 @@ app.get("/api/cards", async (req, res) => {
 // POST new card to MongoDB
 app.post("/api/cards", async (req, res) => {
   try {
-    console.log("Received card data:", req.body);  // <-- add this
+    // Check if a card with the same email or id already exists
+    const existingCard = await Card.findOne({ email: req.body.email });
+    if (existingCard) {
+      return res.status(409).json({ error: "Card with this email already exists" });
+    }
 
     const newCard = new Card(req.body);
     const savedCard = await newCard.save();
@@ -63,6 +67,7 @@ app.post("/api/cards", async (req, res) => {
     res.status(500).json({ error: "Failed to save card" });
   }
 });
+
 
 
 app.listen(PORT, () => {
