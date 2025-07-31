@@ -54,6 +54,8 @@ app.get("/api/cards", async (req, res) => {
 // POST new card to MongoDB
 app.post("/api/cards", async (req, res) => {
   try {
+    console.log("Received card data:", req.body);  // <-- add this
+
     const newCard = new Card(req.body);
     const savedCard = await newCard.save();
     res.status(201).json(savedCard);
@@ -62,6 +64,7 @@ app.post("/api/cards", async (req, res) => {
     res.status(500).json({ error: "Failed to save card" });
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`✅ Server is running at http://localhost:${PORT}`);
