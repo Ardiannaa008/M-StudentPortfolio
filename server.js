@@ -35,7 +35,6 @@ const cardSchema = new mongoose.Schema({
   projectDescription: String,
   email: String,
   linkedin: String,
-  id: Number,
 });
 
 const Card = mongoose.model("Card", cardSchema);
@@ -43,7 +42,7 @@ const Card = mongoose.model("Card", cardSchema);
 // GET all cards from MongoDB
 app.get("/api/cards", async (req, res) => {
   try {
-    const cards = await Card.find().sort({ id: -1 });
+    const cards = await Card.find().sort({ _id: -1 });
     res.json(cards);
   } catch (err) {
     console.error(err);
