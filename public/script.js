@@ -107,11 +107,15 @@ async function saveCard(cardData) {
     });
 
     if (!res.ok) throw new Error('Failed to save card');
-    console.log("✅ Card saved to server!");
+
+    const savedCard = await res.json();
+    console.log("✅ Card saved to server:", savedCard);
+    return savedCard; // if you want to use it later
   } catch (err) {
     console.error("❌ Error saving card:", err);
   }
 }
+
 
 // Load all cards from backend
 async function loadSavedCards() {
