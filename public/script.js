@@ -41,18 +41,22 @@ form.addEventListener('submit', async function (e) {
   const data = new FormData(form);
   const cardData = Object.fromEntries(data.entries());
   cardData.initials = cardData.fullName.split(' ').map(n => n[0]).join('').toUpperCase();
-  cardData.id = Date.now(); // Unique ID for deletion
+  cardData.id = Date.now();
 
   localStorage.setItem('myPortfolioOwner', cardData.email);
 
-  await saveCard(cardData);
-  loadSavedCards();
+  const savedCard = await saveCard(cardData);
+  if (savedCard) {
+    addCardToFeed(savedCard);  // add new card immediately to feed
+  }
+  await loadSavedCards();
 
   form.reset();
   closeModal();
   feed.style.display = 'block';
   feed.scrollIntoView({ behavior: 'smooth' });
 });
+
 
 // Add one card to feed
 function addCardToFeed(data) {
