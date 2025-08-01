@@ -3,7 +3,20 @@ const feed = document.getElementById('feed');
 const universitySections = {};
 const searchInput = document.getElementById('searchInput');
 
-// Show modal form
+
+function escapeHTML(str) {
+  if (!str) return '';
+  return str.replace(/[&<>"']/g, function (m) {
+    return ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[m];
+  });
+}
+
 function scrollToForm() {
   document.getElementById('formModal').style.display = 'block';
 }
@@ -17,7 +30,7 @@ function closeModal() {
 function createUniversitySection(name) {
   const section = document.createElement('div');
   section.className = 'university-section';
-  section.innerHTML = `<h2>${name}</h2><div class="card-group"></div>`;
+  section.innerHTML = `<h2>${escapeHTML(name)}</h2><div class="card-group"></div>`;
   feed.appendChild(section);
   universitySections[name] = section.querySelector('.card-group');
 }
@@ -43,7 +56,7 @@ form.addEventListener('submit', async function (e) {
 
 // Add one card to feed
 function addCardToFeed(data) {
-  if (!data || !data.fullName) return;  // skip if no name
+  if (!data || !data.fullName) return; 
 
   const { fullName, initials, university, program, year, bio, skills, projectTitle, projectDescription, email, linkedin, id } = data;
 
@@ -57,16 +70,16 @@ function addCardToFeed(data) {
 
   card.innerHTML = `
     <div class="card-header">
-      <div class="avatar">${initials}</div>
+      <div class="avatar">${escapeHTML(initials)}</div>
     </div>
     <div class="card-body">
-      <h3 class="portfolio-name">${fullName}</h3>
-      <p class="title">${program}</p>
+      <h3 class="portfolio-name">${escapeHTML(fullName)}</h3>
+      <p class="title">${escapeHTML(program)}</p>
       <p class="meta">
-        <span>🏫 ${university}</span> &nbsp;|&nbsp;
-        <span>📅 ${year}</span>
+        <span>🏫 ${escapeHTML(university)}</span> &nbsp;|&nbsp;
+        <span>📅 ${escapeHTML(year)}</span>
       </p>
-      <p class="bio">${bio}</p>
+      <p class="bio">${escapeHTML(bio)}</p>
 
       ${skills ? `
         <div class="section">
@@ -78,15 +91,15 @@ function addCardToFeed(data) {
         <div class="section">
           <h3>Project</h3>
           <div class="project">
-            <strong>${projectTitle}</strong>
-            <p>${projectDescription}</p>
+            <strong>${escapeHTML(projectTitle)}</strong>
+            <p>${escapeHTML(projectDescription)}</p>
           </div>
         </div>` : ''}
 
       <div class="section">
         <h3>Contact</h3>
-        <p>Email: ${email || 'N/A'}</p>
-        ${linkedin ? `<p>LinkedIn: <a href="${linkedin}" target="_blank">${linkedin}</a></p>` : ''}
+        <p>Email: ${escapeHTML(email) || 'N/A'}</p>
+        ${linkedin ? `<p>LinkedIn: <a href="${escapeHTML(linkedin)}" target="_blank">${escapeHTML(linkedin)}</a></p>` : ''}
       </div>
 
       <div class="actions">

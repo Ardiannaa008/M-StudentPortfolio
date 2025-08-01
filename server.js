@@ -14,6 +14,15 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Sanitize helper function
+function clean(dirty) {
+  if (typeof dirty !== 'string') return '';
+  return sanitizeHtml(dirty, {
+    allowedTags: [],
+    allowedAttributes: {}
+  });
+}
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ Connected to MongoDB"))
@@ -21,9 +30,13 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self'; object-src 'none';");
+  next();
+});
+
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Define Mongoose schema & model
 const cardSchema = new mongoose.Schema({
   fullName: String,
   initials: String,
@@ -40,7 +53,6 @@ const cardSchema = new mongoose.Schema({
 
 const Card = mongoose.model("Card", cardSchema);
 
-// GET all cards from MongoDB
 app.get("/api/cards", async (req, res) => {
   try {
     const cards = await Card.find().sort({ _id: -1 });
@@ -51,28 +63,27 @@ app.get("/api/cards", async (req, res) => {
   }
 });
 
-// POST new card to MongoDB
 app.post("/api/cards", async (req, res) => {
   try {
-    // Check if a card with the same email or id already exists
     const existingCard = await Card.findOne({ email: req.body.email });
     if (existingCard) {
       return res.status(409).json({ error: "Card with this email already exists" });
     }
 
     const sanitizedData = {
-      fullName: sanitizeHtml(req.body.fullName, { allowedTags: [], allowedAttributes: {} }),
-      initials: sanitizeHtml(req.body.initials, { allowedTags: [], allowedAttributes: {} }),
-      university: sanitizeHtml(req.body.university, { allowedTags: [], allowedAttributes: {} }),
-      program: sanitizeHtml(req.body.program, { allowedTags: [], allowedAttributes: {} }),
-      year: sanitizeHtml(req.body.year, { allowedTags: [], allowedAttributes: {} }),
-      bio: sanitizeHtml(req.body.bio, { allowedTags: [], allowedAttributes: {} }),
-      skills: sanitizeHtml(req.body.skills, { allowedTags: [], allowedAttributes: {} }),
-      projectTitle: sanitizeHtml(req.body.projectTitle, { allowedTags: [], allowedAttributes: {} }),
-      projectDescription: sanitizeHtml(req.body.projectDescription, { allowedTags: [], allowedAttributes: {} }),
-      email: sanitizeHtml(req.body.email, { allowedTags: [], allowedAttributes: {} }),
-      linkedin: sanitizeHtml(req.body.linkedin, { allowedTags: [], allowedAttributes: {} }),
+      fullName: clean(req.body.fullName),
+      initials: clean(req.body.initials),
+      university: clean(req.body.university),
+      program: clean(req.body.program),
+      year: clean(req.body.year),
+      bio: clean(req.body.bio),
+      skills: clean(req.body.skills),
+      projectTitle: clean(req.body.projectTitle),
+      projectDescription: clean(req.body.projectDescription),
+      email: clean(req.body.email),
+      linkedin: clean(req.body.linkedin),
     };
+
     const newCard = new Card(sanitizedData);
     const savedCard = await newCard.save();
     res.status(201).json(savedCard);
@@ -81,8 +92,6 @@ app.post("/api/cards", async (req, res) => {
     res.status(500).json({ error: "Failed to save card" });
   }
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`✅ Server is running at http://localhost:${PORT}`);
