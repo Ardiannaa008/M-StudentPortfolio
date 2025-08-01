@@ -65,10 +65,13 @@ app.get("/api/cards", async (req, res) => {
 
 app.post("/api/cards", async (req, res) => {
   try {
-    const existingCard = await Card.findOne({ email: req.body.email });
-    if (existingCard) {
-      return res.status(409).json({ error: "Card with this email already exists" });
+    if (req.body.email) {
+      const existingCard = await Card.findOne({ email: req.body.email });
+      if (existingCard) {
+        return res.status(409).json({ error: "Card with this email already exists" });
+      }
     }
+
 
     const sanitizedData = {
       fullName: clean(req.body.fullName),
