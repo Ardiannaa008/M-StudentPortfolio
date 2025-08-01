@@ -139,11 +139,18 @@ async function loadSavedCards() {
     if (!res.ok) throw new Error('Failed to fetch cards');
     const cards = await res.json();
 
+    // Clear previous cards and sections before adding new ones
+    feed.innerHTML = '';
+    for (const key in universitySections) {
+      delete universitySections[key];
+    }
+
     cards.forEach(addCardToFeed);
   } catch (err) {
     console.error("❌ Error loading cards:", err);
   }
 }
+
 
 // Like button
 function likeCard(button) {
