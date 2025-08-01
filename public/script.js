@@ -99,7 +99,7 @@ function addCardToFeed(data) {
       <div class="section">
         <h3>Contact</h3>
         <p>Email: ${escapeHTML(email) || 'N/A'}</p>
-        ${linkedin ? `<p>LinkedIn: <a href="${escapeHTML(linkedin)}" target="_blank">${escapeHTML(linkedin)}</a></p>` : ''}
+        ${linkedin ? `<p>LinkedIn: <a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer">${escapeHTML(linkedin)}</a></p>` : ''}
       </div>
 
       <div class="actions">
