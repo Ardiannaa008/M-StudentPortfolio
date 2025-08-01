@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import sanitizeHtml from 'sanitize-html';
 
 dotenv.config();
 
@@ -59,7 +60,20 @@ app.post("/api/cards", async (req, res) => {
       return res.status(409).json({ error: "Card with this email already exists" });
     }
 
-    const newCard = new Card(req.body);
+    const sanitizedData = {
+      fullName: sanitizeHtml(req.body.fullName, { allowedTags: [], allowedAttributes: {} }),
+      initials: sanitizeHtml(req.body.initials, { allowedTags: [], allowedAttributes: {} }),
+      university: sanitizeHtml(req.body.university, { allowedTags: [], allowedAttributes: {} }),
+      program: sanitizeHtml(req.body.program, { allowedTags: [], allowedAttributes: {} }),
+      year: sanitizeHtml(req.body.year, { allowedTags: [], allowedAttributes: {} }),
+      bio: sanitizeHtml(req.body.bio, { allowedTags: [], allowedAttributes: {} }),
+      skills: sanitizeHtml(req.body.skills, { allowedTags: [], allowedAttributes: {} }),
+      projectTitle: sanitizeHtml(req.body.projectTitle, { allowedTags: [], allowedAttributes: {} }),
+      projectDescription: sanitizeHtml(req.body.projectDescription, { allowedTags: [], allowedAttributes: {} }),
+      email: sanitizeHtml(req.body.email, { allowedTags: [], allowedAttributes: {} }),
+      linkedin: sanitizeHtml(req.body.linkedin, { allowedTags: [], allowedAttributes: {} }),
+    };
+    const newCard = new Card(sanitizedData);
     const savedCard = await newCard.save();
     res.status(201).json(savedCard);
   } catch (err) {
