@@ -8,7 +8,9 @@ body {
 .hero {
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+  
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+
   color: white;
   border-radius: 0 0 20px 20px;
 }
@@ -22,14 +24,20 @@ body {
 }
 .create-btn {
   padding: 12px 24px;
-  background: #ffd700;
-  color: #333;
+  background: rgba(255, 255, 255, 0.1); /* Transparent white */
+  backdrop-filter: blur(8px); /* Blur effect */
+  -webkit-backdrop-filter: blur(8px); /* For Safari */
+  color: #fff; /* White text */
   font-weight: bold;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
   border-radius: 25px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.create-btn:hover {
+  background: rgba(255, 255, 255, 0.2); /* Slightly more visible on hover */
+}
 /* SEARCH & FILTER */
 .search-filters {
   display: flex;
@@ -150,7 +158,10 @@ button[type="submit"] {
 /* CARD HEADER */
 .card-header {
   height: 120px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: linear-gradient(135deg, #2c5364, #1f1c2c);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   display: flex;
   justify-content: center;
