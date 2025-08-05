@@ -116,24 +116,46 @@ function addCardToFeed(data) {
   universitySections[university].prepend(card);
 }
 
-// Save card to backend
+// ✅ Put this outside the function so it's reusable
+function isValidUniversityEmail(email) {
+  const allowedDomains = [
+    "ukim.edu.mk", "ugd.edu.mk", "uklo.edu.mk", "unite.edu.mk", "uist.edu.mk",
+    "seeu.edu.mk", "ibu.edu.mk", "fon.edu.mk", "uacs.edu.mk", "eurm.edu.mk",
+    "euba.edu.mk", "eust.edu.mk", "mit.edu.mk", "utms.edu.mk", "esra.com.mk",
+    "fbe.edu.mk", "eurocollege.edu.mk"
+  ];
+  const domain = email.split("@")[1]?.toLowerCase();
+  return allowedDomains.includes(domain);
+}
+
 async function saveCard(cardData) {
   try {
+    // ✅ Frontend check
+    if (!isValidUniversityEmail(cardData.email)) {
+      alert("Only university emails are allowed");
+      return;
+    }
+
     const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cardData)
     });
 
-    if (!res.ok) throw new Error('Failed to save card');
+    const responseData = await res.json(); // ✅ Parse once
 
-    const savedCard = await res.json();
-    console.log("✅ Card saved to server:", savedCard);
-    return savedCard; // if you want to use it later
+    if (!res.ok) {
+      alert(responseData.error || "Failed to save card");
+      return null;
+    }
+
+    console.log("✅ Card saved to server:", responseData);
+    return responseData; // ✅ Return parsed response
   } catch (err) {
     console.error("❌ Error saving card:", err);
   }
 }
+
 
 
 // Load all cards from backend

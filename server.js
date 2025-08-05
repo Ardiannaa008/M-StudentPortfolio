@@ -37,6 +37,37 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "../public")));
 
+
+const allowedDomains = [
+  "ukim.edu.mk",    // Ss. Cyril and Methodius University
+  "ugd.edu.mk",     // Goce Delčev University
+  "uklo.edu.mk",    // St. Clement of Ohrid University
+  "unite.edu.mk",   // State University of Tetova
+  "uist.edu.mk",    // University of Information Science & Tech
+  "seeu.edu.mk",    // South East European University
+  "ibu.edu.mk",     // International Balkan University
+  "fon.edu.mk",     // FON University
+  "uacs.edu.mk",    // University American College Skopje
+  "eurm.edu.mk",    // European University – Republic of Macedonia
+  "euba.edu.mk",    // Euro-Balkan University
+  "eust.edu.mk",    // International University of Struga
+  "mit.edu.mk",     // MIT University Skopje
+  "utms.edu.mk",    // University for Tourism and Management
+  "esra.com.mk",    // Audiovisual Arts / ESRA
+  "fbe.edu.mk",     // Business Academy Smilevski
+  "eurocollege.edu.mk" // Eurocollege Kumanovo
+];
+
+function isValidUniversityEmail(email) {
+  if (!email.includes("@")) return false;
+  const domain = email.split("@")[1].toLowerCase();
+  return allowedDomains.includes(domain);
+}
+
+// Example usage:
+console.log(isValidUniversityEmail("student@ukim.edu.mk")); // true
+console.log(isValidUniversityEmail("random@gmail.com")); // false
+
 const cardSchema = new mongoose.Schema({
   fullName: String,
   initials: String,
@@ -65,11 +96,22 @@ app.get("/api/cards", async (req, res) => {
 
 app.post("/api/cards", async (req, res) => {
   try {
-    if (req.body.email) {
-      const existingCard = await Card.findOne({ email: req.body.email });
-      if (existingCard) {
-        return res.status(409).json({ error: "Card with this email already exists" });
-      }
+    const email = req.body.email;
+
+    // Check if email exists
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    // ✅ Check if email is from allowed university domains
+    if (!isValidUniversityEmail(email)) {
+      return res.status(403).json({ error: "Only university emails are allowed" });
+    }
+
+    // Prevent duplicate cards for same email
+    const existingCard = await Card.findOne({ email: email });
+    if (existingCard) {
+      return res.status(409).json({ error: "Card with this email already exists" });
     }
 
 
