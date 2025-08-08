@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="M-StudentPortfolio helps students connect easily and showcase their portfolios.">
-  <title>Student Portfolio Showcase</title>
+  <title>MSPortfolio</title>
   <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 
 </head>
 <body>
@@ -74,11 +76,38 @@
         <label for="projectDescription">Project Description</label>
         <textarea id="projectDescription" name="projectDescription" rows="3" placeholder="Describe what your project does"></textarea>
 
-        <label for="email">Email</label>
-        <input id="email" type="email" name="email" placeholder="you@example.com" />
+        <div class="form-group">
+          <label for="linkedin">LinkedIn</label>
+          <div class="input-icon">
+            <i class="fab fa-linkedin"></i>
+            <input type="url" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/yourprofile" />
+          </div>
+        </div>
 
-        <label for="linkedin">LinkedIn</label>
-        <input id="linkedin" type="url" name="linkedin" placeholder="https://linkedin.com/in/yourprofile" />
+        <div class="form-group">
+          <label for="github">GitHub</label>
+          <div class="input-icon">
+            <i class="fab fa-github"></i>
+            <input type="url" name="github" id="github" placeholder="https://github.com/yourusername" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="instagram">Instagram</label>
+          <div class="input-icon">
+            <i class="fab fa-instagram"></i>
+            <input type="url" name="instagram" id="instagram" placeholder="https://instagram.com/yourhandle" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="twitter">Twitter/X</label>
+          <div class="input-icon">
+            <i class="fab fa-twitter"></i>
+            <input type="url" name="twitter" id="twitter" placeholder="https://twitter.com/yourhandle" />
+          </div>
+        </div>
+
 
         <button type="submit">Submit</button>
       </form>

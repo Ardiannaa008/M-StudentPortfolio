@@ -80,6 +80,9 @@ const cardSchema = new mongoose.Schema({
   projectDescription: String,
   email: String,
   linkedin: String,
+  github: String,
+  instagram: String,
+  twitter: String
 });
 
 const Card = mongoose.model("Card", cardSchema);
@@ -127,6 +130,9 @@ app.post("/api/cards", async (req, res) => {
       projectDescription: clean(req.body.projectDescription),
       email: clean(req.body.email),
       linkedin: clean(req.body.linkedin),
+      github: clean(req.body.github), 
+      instagram: clean(req.body.instagram), 
+      twitter: clean(req.body.twitter)
     };
 
     const newCard = new Card(sanitizedData);
