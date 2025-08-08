@@ -103,7 +103,11 @@ function addCardToFeed(data) {
       <div class="section">
         <h3>Contact</h3>
         <p>Email: ${escapeHTML(email) || 'N/A'}</p>
-        ${linkedin ? `<p>LinkedIn: <a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer">${escapeHTML(linkedin)}</a></p>` : ''}
+        <div class="social-links">
+          ${linkedin ? `<a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+          ${github ? `<a href="${escapeHTML(github)}" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
+          ${instagram ? `<a href="${escapeHTML(instagram)}" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+      </div>
       </div>
 
       <div class="actions">

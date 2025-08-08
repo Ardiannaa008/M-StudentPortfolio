@@ -309,6 +309,18 @@ button[type="submit"] {
   border: 1px solid #ccc;
 }
 
+.social-links a {
+  margin-right: 12px;
+  color: #6a11cb;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.social-links a:hover {
+  color: #8a2be2;
+}
+
 
 .card img {
   width: 300px;
