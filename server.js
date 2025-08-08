@@ -82,7 +82,7 @@ const cardSchema = new mongoose.Schema({
   linkedin: String,
   github: String,
   instagram: String,
-  twitter: String
+  twitter: String,
 });
 
 const Card = mongoose.model("Card", cardSchema);
