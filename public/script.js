@@ -3,6 +3,13 @@ const feed = document.getElementById('feed');
 const universitySections = {};
 const searchInput = document.getElementById('searchInput');
 
+async function loadSidebar() {
+  const response = await fetch('filterSidebar.html');
+  const sidebarHTML = await response.text();
+  document.getElementById('sidebar-container').innerHTML = sidebarHTML;
+
+}
+
 
 function escapeHTML(str) {
   if (typeof str !== 'string') return '';
@@ -214,4 +221,6 @@ searchInput.addEventListener('input', function () {
 });
 
 // Load all saved cards when page loads
-window.addEventListener('DOMContentLoaded', loadSavedCards);
+window.addEventListener('DOMContentLoaded', 
+  loadSidebar(),
+  loadSavedCards);
