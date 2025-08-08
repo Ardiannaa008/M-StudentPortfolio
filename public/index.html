@@ -14,7 +14,7 @@
 
 
 <body>
-  <div id="sidebar-container"></div> 
+  
   <div class="hero">
     <h1>Student Portfolio Showcase</h1>
     <p>Discover amazing student projects, connect with peers, and showcase your own work to the world.</p>
@@ -22,8 +22,61 @@
   </div>
 
   <div class="search-filters">
-    <input type="text" id="searchInput" placeholder="Search by name..." aria-label="Search by name" />
-  </div>
+  <input type="text" id="searchInput" placeholder="Search by name..." aria-label="Search by name" />
+  <button id="filter-toggle" aria-expanded="false" aria-controls="sidebar" aria-label="Toggle filters">
+    <i class="fas fa-filter"></i> Filters
+  </button>
+</div>
+
+
+    <div id="sidebar" class="sidebar hidden">
+    <h3>Filter by:</h3>
+
+    <div class="filter-group">
+      <h4>University</h4>
+      
+      <div class="button-checkboxes">
+        <input type="checkbox" id="ukim" name="filterUniversity" value="UKIM" hidden />
+        <label for="ukim">UKIM</label>
+
+        <input type="checkbox" id="seeu" name="filterUniversity" value="SEEU" hidden />
+        <label for="seeu">SEEU</label>
+
+        <input type="checkbox" id="fon" name="filterUniversity" value="FON" hidden />
+        <label for="fon">FON</label>
+      </div>
+    </div>
+
+
+    <div class="filter-group">
+      <label for="program-search">Program</label>
+      <input type="text" id="program-search" placeholder="Search programs..." />
+      <div id="program-options" class="program-options-container"></div>
+    </div>
+
+
+
+
+    <div class="filter-group">
+      <h4>Year</h4>
+      <div class="button-checkboxes">
+        <input type="checkbox" id="year1" name="filterYear" value="1" hidden />
+        <label for="year1">1st Year</label>
+
+        <input type="checkbox" id="year2" name="filterYear" value="2" hidden />
+        <label for="year2">2nd Year</label>
+
+        <input type="checkbox" id="year3" name="filterYear" value="3" hidden />
+        <label for="year3">3rd Year</label>
+
+        <input type="checkbox" id="year4" name="filterYear" value="4" hidden />
+        <label for="year4">4th Year</label>
+      </div>
+    </div>
+
+
+
+
 
   
 

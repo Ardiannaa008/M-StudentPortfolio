@@ -2,13 +2,27 @@ const form = document.getElementById('portfolio-form');
 const feed = document.getElementById('feed');
 const universitySections = {};
 const searchInput = document.getElementById('searchInput');
+const filterToggleBtn = document.getElementById('filter-toggle');
+const sidebar = document.getElementById('sidebar');
+const body = document.body;
 
-async function loadSidebar() {
-  const response = await fetch('filterSidebar.html');
-  const sidebarHTML = await response.text();
-  document.getElementById('sidebar-container').innerHTML = sidebarHTML;
 
+const backdrop = document.createElement('div');
+backdrop.className = 'sidebar-backdrop';
+document.body.appendChild(backdrop);
+
+function toggleSidebar() {
+  const isActive = sidebar.classList.toggle('active');
+  body.classList.toggle('sidebar-open', isActive);
+  filterToggleBtn.setAttribute('aria-expanded', isActive);
+  backdrop.classList.toggle('active', isActive);
 }
+
+filterToggleBtn.addEventListener('click', toggleSidebar);
+backdrop.addEventListener('click', toggleSidebar);
+
+
+
 
 
 function escapeHTML(str) {
@@ -189,10 +203,77 @@ async function loadSavedCards() {
     }
 
     cards.forEach(addCardToFeed);
+
+    buildProgramFilters();
   } catch (err) {
     console.error("❌ Error loading cards:", err);
   }
 }
+
+const programSearchInput = document.getElementById("program-search");
+const programOptionsContainer = document.getElementById("program-options");
+let allPrograms = new Set();
+
+// Called once after cards are loaded
+function buildProgramFilters() {
+  allPrograms.clear();
+  const cards = document.querySelectorAll('.profile-card');
+  cards.forEach(card => {
+    const program = card.querySelector('.title')?.textContent?.trim();
+    if (program) allPrograms.add(program);
+  });
+
+  renderProgramOptions();
+}
+
+function renderProgramOptions(filterText = "") {
+  const selected = new Set(
+    Array.from(document.querySelectorAll('.program-option.selected')).map(el => el.textContent.trim())
+  );
+
+  programOptionsContainer.innerHTML = "";
+  Array.from(allPrograms)
+    .filter(p => p.toLowerCase().includes(filterText.toLowerCase()))
+    .forEach(program => {
+      const option = document.createElement("div");
+      option.className = "program-option";
+      option.textContent = program;
+
+      if (selected.has(program)) {
+        option.classList.add("selected");
+      }
+
+      option.addEventListener("click", () => {
+        option.classList.toggle("selected");
+        filterCardsByProgram(); // filter when selection changes
+      });
+
+      programOptionsContainer.appendChild(option);
+    });
+}
+
+// Called on filter click
+function filterCardsByProgram() {
+  const selectedPrograms = Array.from(document.querySelectorAll('.program-option.selected'))
+    .map(el => el.textContent.trim());
+
+  const cards = document.querySelectorAll('.profile-card');
+
+  cards.forEach(card => {
+    const program = card.querySelector('.title')?.textContent?.trim();
+    if (selectedPrograms.length === 0 || selectedPrograms.includes(program)) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+
+// Re-render options on search input
+programSearchInput.addEventListener("input", (e) => {
+  renderProgramOptions(e.target.value);
+});
+
 
 
 // Like button
@@ -222,5 +303,5 @@ searchInput.addEventListener('input', function () {
 
 // Load all saved cards when page loads
 window.addEventListener('DOMContentLoaded', 
-  loadSidebar(),
+  
   loadSavedCards);
