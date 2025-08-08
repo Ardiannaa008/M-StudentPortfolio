@@ -5,7 +5,7 @@ const searchInput = document.getElementById('searchInput');
 
 
 function escapeHTML(str) {
-  if (!str) return '';
+  if (typeof str !== 'string') return '';
   return str.replace(/[&<>"']/g, function (m) {
     return ({
       '&': '&amp;',
