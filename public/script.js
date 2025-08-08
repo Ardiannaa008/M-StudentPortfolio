@@ -66,7 +66,7 @@ form.addEventListener('submit', async function (e) {
 function addCardToFeed(data) {
   if (!data || !data.fullName) return; 
 
-  const { fullName, initials, university, program, year, bio, skills, projectTitle, projectDescription, email, linkedin, id } = data;
+  const { fullName, initials, university, program, year, bio, skills, projectTitle, projectDescription, email, linkedin, github, instagram, twitter, id } = data;
 
   if (!universitySections[university]) {
     createUniversitySection(university);
