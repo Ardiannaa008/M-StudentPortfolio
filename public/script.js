@@ -17,6 +17,10 @@ function escapeHTML(str) {
   });
 }
 
+function isValidUrl(url) {
+  return typeof url === 'string' && url.trim().startsWith('http');
+}
+
 function scrollToForm() {
   document.getElementById('formModal').style.display = 'block';
 }
@@ -101,14 +105,16 @@ function addCardToFeed(data) {
         </div>` : ''}
 
       <div class="section">
-        <h3>Contact</h3>
-        <p>Email: ${escapeHTML(email) || 'N/A'}</p>
-        <div class="social-links">
-          ${linkedin ? `<a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-          ${github ? `<a href="${escapeHTML(github)}" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
-          ${instagram ? `<a href="${escapeHTML(instagram)}" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+      <h3>Contact</h3>
+      <p>Email: ${escapeHTML(email) || 'N/A'}</p>
+      <div class="social-links">
+        ${isValidUrl(linkedin) ? `<a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+        ${isValidUrl(github) ? `<a href="${escapeHTML(github)}" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
+        ${isValidUrl(instagram) ? `<a href="${escapeHTML(instagram)}" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
       </div>
-      </div>
+    </div>
+
+
 
       <div class="actions">
         <button onclick="likeCard(this)">👍 Like</button>
