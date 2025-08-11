@@ -16,12 +16,12 @@ const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = [
   'http://127.0.0.1:5500',
-  'https://m-student-portfolio.vercel.app/',
-]
+  'https://m-student-portfolio.vercel.app'
+];
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, or Postman)
+    // Allow requests with no origin (e.g. Postman, curl)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
@@ -46,7 +46,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch(err => console.error("❌ MongoDB connection error:", err));
 
-app.use(cors());
+
 app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self'; object-src 'none';");
