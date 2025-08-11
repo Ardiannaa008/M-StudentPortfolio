@@ -77,17 +77,6 @@ body {
   overflow-y: auto;
 }
 
-body.sidebar-open #feed {
-  margin-left: 0;
-  transition: none;
-}
-
-@media (min-width: 768px) {
-  body.sidebar-open #feed {
-    margin-left: 280px;
-    transition: margin-left 0.3s ease;
-  }
-}
 .sidebar.active {
   transform: translateX(0);
 }
@@ -127,9 +116,16 @@ body.sidebar-open #feed {
   display: block;
 }
 
+/* Remove feed shift to prevent overlap issues */
+body.sidebar-open #feed {
+  margin-left: 0;
+  transition: none;
+}
+
+/* Remove duplicate and media query for simplicity */
 .sidebar-open #feed {
-  margin-left: 280px;
-  transition: margin-left 0.3s ease;
+  margin-left: 0;
+  transition: none;
 }
 
 
