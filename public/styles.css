@@ -61,26 +61,32 @@ body {
   border: 1px solid #ccc;
 }
 
+/* Sidebar */
 .sidebar {
-  position: fixed; /* or absolute */
+  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: 280px;
   background: #f0f0f0;
   padding: 20px;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   z-index: 1000;
+  overflow-y: auto;
 }
 
+body.sidebar-open #feed {
+  margin-left: 0; /* Remove margin shift */
+  transition: none; /* Remove transition to prevent animation */
+}
 .sidebar.active {
   transform: translateX(0);
 }
 
 #filter-toggle {
-  align-self: flex-end;  /* This pushes button to right */
+  align-self: flex-end;
   background: #6a11cb;
   color: white;
   border: none;
@@ -91,9 +97,6 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  /* Remove fixed positioning */
-  position: static;
-  margin: 0;
 }
 
 
@@ -102,11 +105,13 @@ body {
   font-size: 1.2rem;
 }
 
-/* Optional: dim background when sidebar open */
 .sidebar-backdrop {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.3);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
   z-index: 900;
   display: none;
 }
@@ -242,11 +247,10 @@ button[type="submit"] {
   gap: 2rem;
   margin-top: 20px;
   width: 100%;
-  justify-items: center; /* centers cards in their grid cells */
+  justify-items: center; /* Centers cards horizontally in their grid cells */
+  align-items: start;
 }
 
-/* PROFILE CARD */
-/* PROFILE CARD */
 .profile-card {
   background: #fff;
   border-radius: 18px;
@@ -256,6 +260,8 @@ button[type="submit"] {
   flex-direction: column;
   transition: all 0.3s ease;
   position: relative;
+  width: 100%; /* Ensure cards take full grid cell width */
+  max-width: 360px;
 }
 
 .profile-card:hover {
