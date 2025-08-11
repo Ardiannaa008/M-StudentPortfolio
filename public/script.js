@@ -199,27 +199,20 @@ async function saveCard(cardData) {
 
 async function loadSavedCards() {
   try {
-    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch cards: ${res.status} ${res.statusText}`);
-    }
+    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards');
+    if (!res.ok) throw new Error(`Failed to fetch cards: ${res.status}`);
     const cards = await res.json();
-    console.log('Cards fetched:', cards);
 
     feed.innerHTML = '';
-    for (const key in universitySections) {
-      delete universitySections[key];
-    }
+    Object.keys(universitySections).forEach(k => delete universitySections[k]);
 
     cards.forEach(addCardToFeed);
+
     buildProgramFilters();
-    resetFilters(); // Reset filters to show all cards initially
+    resetFilters(); // Always after program filters are built
   } catch (err) {
-    console.error('❌ Error loading cards:', err);
-    alert('Failed to load portfolios. Please try again later.');
+    console.error(err);
+    alert('Failed to load portfolios.');
   }
 }
 
@@ -261,16 +254,16 @@ function renderProgramOptions(filterText = '') {
 }
 
 function resetFilters() {
-  console.log('Resetting filters');
   document.querySelectorAll('.program-option.selected').forEach(el => el.classList.remove('selected'));
   document.querySelectorAll('input[name="filterUniversity"]').forEach(checkbox => checkbox.checked = false);
   document.querySelectorAll('input[name="filterYear"]').forEach(checkbox => checkbox.checked = false);
   searchInput.value = '';
   programSearchInput.value = '';
+  // Ensure all cards are visible
   document.querySelectorAll('.profile-card').forEach(card => {
     card.style.display = 'block';
   });
-}
+}}
 
 function filterCards() {
   const selectedPrograms = Array.from(document.querySelectorAll('.program-option.selected')).map(el => el.textContent.trim());

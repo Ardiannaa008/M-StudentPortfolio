@@ -5,36 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="M-StudentPortfolio helps students connect easily and showcase their portfolios.">
   <title>MSPortfolio</title>
+
+  <!-- Styles -->
   <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-
-
 </head>
 
-
 <body>
-  
+
+  <!-- Hero Section -->
   <div class="hero">
     <h1>Student Portfolio Showcase</h1>
     <p>Discover amazing student projects, connect with peers, and showcase your own work to the world.</p>
-    <button class="create-btn" onclick="scrollToForm()">+ Create Your Portfolio</button>
+    <button class="create-btn" id="openFormBtn">+ Create Your Portfolio</button>
   </div>
 
+  <!-- Search & Filter Button -->
   <div class="search-filters">
-  <input type="text" id="searchInput" placeholder="Search by name..." aria-label="Search by name" />
-  <button id="filter-toggle" aria-expanded="false" aria-controls="sidebar" aria-label="Toggle filters">
-    <i class="fas fa-filter"></i> Filters
-  </button>
-</div>
+    <input type="text" id="searchInput" placeholder="Search by name..." aria-label="Search by name" />
+    <button id="filter-toggle" aria-expanded="false" aria-controls="sidebar" aria-label="Toggle filters">
+      <i class="fas fa-filter"></i> Filters
+    </button>
+  </div>
 
-
-    <div id="sidebar" class="sidebar">
+  <!-- Sidebar Filters -->
+  <div id="sidebar" class="sidebar">
     <h3>Filter by:</h3>
 
+    <!-- University Filter -->
     <div class="filter-group">
       <h4>University</h4>
-      
       <div class="button-checkboxes">
         <input type="checkbox" id="ukim" name="filterUniversity" value="UKIM" hidden />
         <label for="ukim">UKIM</label>
@@ -47,16 +48,14 @@
       </div>
     </div>
 
-
+    <!-- Program Filter -->
     <div class="filter-group">
       <h4>Program</h4>
       <input type="text" id="program-search" placeholder="Search programs..." />
       <div id="program-options" class="program-options-container"></div>
     </div>
 
-
-
-
+    <!-- Year Filter -->
     <div class="filter-group">
       <h4>Year</h4>
       <div class="button-checkboxes">
@@ -73,29 +72,27 @@
         <label for="year4">4th Year</label>
       </div>
     </div>
+  </div>
 
+  <!-- Sidebar Backdrop -->
+  <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
 
-
-
-
-  
-
-
+  <!-- Portfolio Form Modal -->
   <div id="formModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()" aria-label="Close form">&times;</span>
       <h2>Make your portfolio</h2>
       <form id="portfolio-form">
-        
+
         <label for="fullName">Full Name *</label>
         <input id="fullName" type="text" name="fullName" required placeholder="Enter your full name" />
 
         <label for="bio">Bio</label>
         <textarea id="bio" name="bio" rows="3" placeholder="Short introduction about yourself"></textarea>
 
-        <label for="university"> University </label>
-        <select id="university" name="university" required title="Select your university">
-          <option >Select your university</option>
+        <label for="university">University *</label>
+        <select id="university" name="university" required>
+          <option value="">Select your university</option>
           <option>Ss. Cyril and Methodius University in Skopje</option>
           <option>Goce Delčev University of Štip</option>
           <option>St. Clement of Ohrid University of Bitola</option>
@@ -108,7 +105,7 @@
           <option>European University – Republic of Macedonia</option>
           <option>Euro-Balkan University</option>
           <option>International University of Struga</option>
-          <option">MIT University Skopje</option>
+          <option>MIT University Skopje</option>
           <option>University for Tourism and Management</option>
           <option>University for Audiovisual Arts / ESRA</option>
           <option>Business Academy Smilevski</option>
@@ -119,7 +116,7 @@
         <input id="program" type="text" name="program" required placeholder="e.g. Computer Science" />
 
         <label for="year">Year of Study</label>
-        <select id="year" name="year" title="Select year of study">
+        <select id="year" name="year">
           <option value="">Choose year...</option>
           <option>1 year</option>
           <option>2 year</option>
@@ -134,54 +131,40 @@
         <input id="projectTitle" type="text" name="projectTitle" placeholder="Project Name" />
 
         <label for="projectDescription">Project Description</label>
-        <textarea id="projectDescription" name="projectDescription" rows="3" placeholder="Describe what your project does"></textarea>
+        <textarea id="projectDescription" name="projectDescription" rows="3" placeholder="Describe your project"></textarea>
 
-
-        <label for="email">Email</label>
-<input id="email" type="email" name="email" placeholder="you@example.com" required />
+        <label for="email">Email *</label>
+        <input id="email" type="email" name="email" placeholder="you@example.com" required />
 
         <div class="form-group">
           <label for="linkedin">LinkedIn</label>
-          <div class="input-icon">
-            <i class="fab fa-linkedin"></i>
-            <input type="url" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/yourprofile" />
-          </div>
+          <input type="url" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/yourprofile" />
         </div>
 
         <div class="form-group">
           <label for="github">GitHub</label>
-          <div class="input-icon">
-            <i class="fab fa-github"></i>
-            <input type="url" name="github" id="github" placeholder="https://github.com/yourusername" />
-          </div>
+          <input type="url" name="github" id="github" placeholder="https://github.com/yourusername" />
         </div>
 
         <div class="form-group">
           <label for="instagram">Instagram</label>
-          <div class="input-icon">
-            <i class="fab fa-instagram"></i>
-            <input type="url" name="instagram" id="instagram" placeholder="https://instagram.com/yourhandle" />
-          </div>
+          <input type="url" name="instagram" id="instagram" placeholder="https://instagram.com/yourhandle" />
         </div>
 
         <div class="form-group">
           <label for="twitter">Twitter/X</label>
-          <div class="input-icon">
-            <i class="fab fa-twitter"></i>
-            <input type="url" name="twitter" id="twitter" placeholder="https://twitter.com/yourhandle" />
-          </div>
+          <input type="url" name="twitter" id="twitter" placeholder="https://twitter.com/yourhandle" />
         </div>
-
 
         <button type="submit">Submit</button>
       </form>
     </div>
   </div>
 
-  <div class="form-wrapper" id="feed">
-  
-  </div>
+  <!-- Feed Section -->
+  <div id="feed"></div>
 
+  <!-- JS -->
   <script src="script.js" defer></script>
 </body>
 </html>
