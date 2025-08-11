@@ -263,7 +263,7 @@ function resetFilters() {
   document.querySelectorAll('.profile-card').forEach(card => {
     card.style.display = 'block';
   });
-}}
+}
 
 function filterCards() {
   const selectedPrograms = Array.from(document.querySelectorAll('.program-option.selected')).map(el => el.textContent.trim());
