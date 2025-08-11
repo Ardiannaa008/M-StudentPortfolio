@@ -5,7 +5,9 @@ const searchInput = document.getElementById('searchInput');
 const filterToggleBtn = document.getElementById('filter-toggle');
 const sidebar = document.getElementById('sidebar');
 const body = document.body;
-
+const programSearchInput = document.getElementById('program-search');
+const programOptionsContainer = document.getElementById('program-options');
+let allPrograms = new Set();
 
 const backdrop = document.createElement('div');
 backdrop.className = 'sidebar-backdrop';
@@ -16,14 +18,26 @@ function toggleSidebar() {
   body.classList.toggle('sidebar-open', isActive);
   filterToggleBtn.setAttribute('aria-expanded', isActive);
   backdrop.classList.toggle('active', isActive);
+  console.log('Sidebar toggled:', isActive ? 'Open' : 'Closed');
 }
 
-filterToggleBtn.addEventListener('click', toggleSidebar);
-backdrop.addEventListener('click', toggleSidebar);
+filterToggleBtn.addEventListener('click', (e) => {
+  console.log('Filter button clicked');
+  toggleSidebar();
+  e.stopPropagation();
+});
 
+backdrop.addEventListener('click', (e) => {
+  if (e.target === backdrop) {
+    console.log('Backdrop clicked');
+    toggleSidebar();
+  }
+});
 
-
-
+document.querySelector('.create-btn').addEventListener('click', () => {
+  console.log('Create button clicked');
+  scrollToForm();
+});
 
 function escapeHTML(str) {
   if (typeof str !== 'string') return '';
@@ -43,24 +57,24 @@ function isValidUrl(url) {
 }
 
 function scrollToForm() {
+  console.log('Opening modal');
   document.getElementById('formModal').style.display = 'block';
 }
 
-// Close modal
 function closeModal() {
+  console.log('Closing modal');
   document.getElementById('formModal').style.display = 'none';
 }
 
-// Create new university section if it doesn't exist
 function createUniversitySection(name) {
   const section = document.createElement('div');
   section.className = 'university-section';
   section.innerHTML = `<h2>${escapeHTML(name)}</h2><div class="card-group"></div>`;
   feed.appendChild(section);
   universitySections[name] = section.querySelector('.card-group');
+  console.log('Created university section:', name);
 }
 
-// Handle form submission
 form.addEventListener('submit', async function (e) {
   e.preventDefault();
   const data = new FormData(form);
@@ -72,7 +86,7 @@ form.addEventListener('submit', async function (e) {
 
   const savedCard = await saveCard(cardData);
   if (savedCard) {
-    addCardToFeed(savedCard);  // add new card immediately to feed
+    addCardToFeed(savedCard);
   }
   await loadSavedCards();
 
@@ -82,11 +96,12 @@ form.addEventListener('submit', async function (e) {
   feed.scrollIntoView({ behavior: 'smooth' });
 });
 
-
-// Add one card to feed
 function addCardToFeed(data) {
-  if (!data || !data.fullName) return; 
-
+  if (!data || !data.fullName) {
+    console.log('Invalid card data:', data);
+    return;
+  }
+  console.log('Adding card:', data);
   const { fullName, initials, university, program, year, bio, skills, projectTitle, projectDescription, email, linkedin, github, instagram, twitter, id } = data;
 
   if (!universitySections[university]) {
@@ -96,6 +111,8 @@ function addCardToFeed(data) {
   const card = document.createElement('div');
   card.className = 'profile-card';
   card.dataset.id = id;
+  card.dataset.university = university;
+  card.dataset.year = year;
 
   card.innerHTML = `
     <div class="card-header">
@@ -109,13 +126,11 @@ function addCardToFeed(data) {
         <span>📅 ${escapeHTML(year)}</span>
       </p>
       <p class="bio">${escapeHTML(bio)}</p>
-
       ${skills ? `
         <div class="section">
           <h3>Skills</h3>
           <div class="tags">${skills.split(',').map(skill => `<span class="tag">${skill.trim()}</span>`).join(' ')}</div>
         </div>` : ''}
-
       ${projectTitle ? `
         <div class="section">
           <h3>Project</h3>
@@ -124,19 +139,15 @@ function addCardToFeed(data) {
             <p>${escapeHTML(projectDescription)}</p>
           </div>
         </div>` : ''}
-
       <div class="section">
-      <h3>Contact</h3>
-      <p>Email: ${escapeHTML(email) || 'N/A'}</p>
-      <div class="social-links">
-        ${isValidUrl(linkedin) ? `<a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-        ${isValidUrl(github) ? `<a href="${escapeHTML(github)}" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
-        ${isValidUrl(instagram) ? `<a href="${escapeHTML(instagram)}" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+        <h3>Contact</h3>
+        <p>Email: ${escapeHTML(email) || 'N/A'}</p>
+        <div class="social-links">
+          ${isValidUrl(linkedin) ? `<a href="${escapeHTML(linkedin)}" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+          ${isValidUrl(github) ? `<a href="${escapeHTML(github)}" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
+          ${isValidUrl(instagram) ? `<a href="${escapeHTML(instagram)}" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+        </div>
       </div>
-    </div>
-
-
-
       <div class="actions">
         <button onclick="likeCard(this)">👍 Like</button>
         <button onclick="commentCard(this)">💬 Comment</button>
@@ -145,76 +156,73 @@ function addCardToFeed(data) {
   `;
 
   universitySections[university].prepend(card);
+  console.log('Card added to:', universitySections[university]);
 }
 
-// ✅ Put this outside the function so it's reusable
 function isValidUniversityEmail(email) {
   const allowedDomains = [
-    "ukim.edu.mk", "ugd.edu.mk", "uklo.edu.mk", "unite.edu.mk", "uist.edu.mk",
-    "seeu.edu.mk", "ibu.edu.mk", "fon.edu.mk", "uacs.edu.mk", "eurm.edu.mk",
-    "euba.edu.mk", "eust.edu.mk", "mit.edu.mk", "utms.edu.mk", "esra.com.mk",
-    "fbe.edu.mk", "eurocollege.edu.mk"
+    'ukim.edu.mk', 'ugd.edu.mk', 'uklo.edu.mk', 'unite.edu.mk', 'uist.edu.mk',
+    'seeu.edu.mk', 'ibu.edu.mk', 'fon.edu.mk', 'uacs.edu.mk', 'eurm.edu.mk',
+    'euba.edu.mk', 'eust.edu.mk', 'mit.edu.mk', 'utms.edu.mk', 'esra.com.mk',
+    'fbe.edu.mk', 'eurocollege.edu.mk'
   ];
-  const domain = email.split("@")[1]?.toLowerCase();
+  const domain = email.split('@')[1]?.toLowerCase();
   return allowedDomains.includes(domain);
 }
 
 async function saveCard(cardData) {
   try {
-    // ✅ Frontend check
     if (!isValidUniversityEmail(cardData.email)) {
-      alert("Only university emails are allowed");
-      return;
+      alert('Only university emails are allowed');
+      return null;
     }
 
     const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cardData)
+      body: JSON.stringify(cardData),
     });
 
-    const responseData = await res.json(); // ✅ Parse once
-
+    const responseData = await res.json();
     if (!res.ok) {
-      alert(responseData.error || "Failed to save card");
-      return null;
+      throw new Error(responseData.error || `Failed to save card: ${res.status} ${res.statusText}`);
     }
 
-    console.log("✅ Card saved to server:", responseData);
-    return responseData; // ✅ Return parsed response
+    console.log('✅ Card saved to server:', responseData);
+    return responseData;
   } catch (err) {
-    console.error("❌ Error saving card:", err);
+    console.error('❌ Error saving card:', err);
+    alert('Failed to save portfolio. Please check your network or try again later.');
+    return null;
   }
 }
 
-
-
-// Load all cards from backend
 async function loadSavedCards() {
   try {
-    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards');
-    if (!res.ok) throw new Error('Failed to fetch cards');
+    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch cards: ${res.status} ${res.statusText}`);
+    }
     const cards = await res.json();
+    console.log('Cards fetched:', cards);
 
-    // Clear previous cards and sections before adding new ones
     feed.innerHTML = '';
     for (const key in universitySections) {
       delete universitySections[key];
     }
 
     cards.forEach(addCardToFeed);
-
     buildProgramFilters();
+    resetFilters(); // Reset filters to show all cards initially
   } catch (err) {
-    console.error("❌ Error loading cards:", err);
+    console.error('❌ Error loading cards:', err);
+    alert('Failed to load portfolios. Please try again later.');
   }
 }
 
-const programSearchInput = document.getElementById("program-search");
-const programOptionsContainer = document.getElementById("program-options");
-let allPrograms = new Set();
-
-// Called once after cards are loaded
 function buildProgramFilters() {
   allPrograms.clear();
   const cards = document.querySelectorAll('.profile-card');
@@ -222,61 +230,88 @@ function buildProgramFilters() {
     const program = card.querySelector('.title')?.textContent?.trim();
     if (program) allPrograms.add(program);
   });
-
+  console.log('Programs built:', Array.from(allPrograms));
   renderProgramOptions();
 }
 
-function renderProgramOptions(filterText = "") {
+function renderProgramOptions(filterText = '') {
   const selected = new Set(
     Array.from(document.querySelectorAll('.program-option.selected')).map(el => el.textContent.trim())
   );
 
-  programOptionsContainer.innerHTML = "";
+  programOptionsContainer.innerHTML = '';
   Array.from(allPrograms)
     .filter(p => p.toLowerCase().includes(filterText.toLowerCase()))
     .forEach(program => {
-      const option = document.createElement("div");
-      option.className = "program-option";
+      const option = document.createElement('div');
+      option.className = 'program-option';
       option.textContent = program;
 
       if (selected.has(program)) {
-        option.classList.add("selected");
+        option.classList.add('selected');
       }
 
-      option.addEventListener("click", () => {
-        option.classList.toggle("selected");
-        filterCardsByProgram(); // filter when selection changes
+      option.addEventListener('click', () => {
+        option.classList.toggle('selected');
+        filterCards();
       });
 
       programOptionsContainer.appendChild(option);
     });
 }
 
-// Called on filter click
-function filterCardsByProgram() {
-  const selectedPrograms = Array.from(document.querySelectorAll('.program-option.selected'))
-    .map(el => el.textContent.trim());
-
-  const cards = document.querySelectorAll('.profile-card');
-
-  cards.forEach(card => {
-    const program = card.querySelector('.title')?.textContent?.trim();
-    if (selectedPrograms.length === 0 || selectedPrograms.includes(program)) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
+function resetFilters() {
+  console.log('Resetting filters');
+  document.querySelectorAll('.program-option.selected').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('input[name="filterUniversity"]').forEach(checkbox => checkbox.checked = false);
+  document.querySelectorAll('input[name="filterYear"]').forEach(checkbox => checkbox.checked = false);
+  searchInput.value = '';
+  programSearchInput.value = '';
+  document.querySelectorAll('.profile-card').forEach(card => {
+    card.style.display = 'block';
   });
 }
 
-// Re-render options on search input
-programSearchInput.addEventListener("input", (e) => {
+function filterCards() {
+  const selectedPrograms = Array.from(document.querySelectorAll('.program-option.selected')).map(el => el.textContent.trim());
+  const selectedUniversities = Array.from(document.querySelectorAll('input[name="filterUniversity"]:checked')).map(el => el.value);
+  const selectedYears = Array.from(document.querySelectorAll('input[name="filterYear"]:checked')).map(el => el.value);
+  const searchTerm = searchInput.value.toLowerCase();
+
+  console.log('Filtering with:', { selectedPrograms, selectedUniversities, selectedYears, searchTerm });
+
+  const cards = document.querySelectorAll('.profile-card');
+  cards.forEach(card => {
+    const program = card.querySelector('.title')?.textContent?.trim();
+    const university = card.dataset.university;
+    const year = card.dataset.year;
+    const name = card.querySelector('.portfolio-name')?.textContent?.toLowerCase() || '';
+
+    const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(program);
+    const matchesUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(university);
+    const matchesYear = selectedYears.length === 0 || selectedYears.includes(year);
+    const matchesSearch = searchTerm === '' || name.includes(searchTerm);
+
+    card.style.display = (matchesProgram && matchesUniversity && matchesYear && matchesSearch) ? 'block' : 'none';
+  });
+}
+
+programSearchInput.addEventListener('input', (e) => {
   renderProgramOptions(e.target.value);
 });
 
+searchInput.addEventListener('input', () => {
+  filterCards();
+});
 
+// Add event listeners for university and year filters
+document.querySelectorAll('input[name="filterUniversity"], input[name="filterYear"]').forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    console.log('Filter changed:', checkbox.name, checkbox.value, checkbox.checked);
+    filterCards();
+  });
+});
 
-// Like button
 function likeCard(button) {
   let count = button.dataset.count ? parseInt(button.dataset.count) : 0;
   count++;
@@ -284,24 +319,9 @@ function likeCard(button) {
   button.textContent = `👍 Like (${count})`;
 }
 
-// Comment button
 function commentCard(button) {
-  const comment = prompt("Leave a comment:");
+  const comment = prompt('Leave a comment:');
   if (comment) alert(`You said: ${comment}`);
 }
 
-// Search
-searchInput.addEventListener('input', function () {
-  const searchTerm = this.value.toLowerCase();
-  const allCards = document.querySelectorAll('.profile-card');
-
-  allCards.forEach(card => {
-    const name = card.querySelector('.portfolio-name')?.textContent.toLowerCase() || '';
-    card.style.display = name.includes(searchTerm) ? 'block' : 'none';
-  });
-});
-
-// Load all saved cards when page loads
-window.addEventListener('DOMContentLoaded', 
-  
-  loadSavedCards);
+window.addEventListener('DOMContentLoaded', loadSavedCards);

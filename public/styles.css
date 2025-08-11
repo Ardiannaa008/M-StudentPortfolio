@@ -78,8 +78,15 @@ body {
 }
 
 body.sidebar-open #feed {
-  margin-left: 0; /* Remove margin shift */
-  transition: none; /* Remove transition to prevent animation */
+  margin-left: 0;
+  transition: none;
+}
+
+@media (min-width: 768px) {
+  body.sidebar-open #feed {
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+  }
 }
 .sidebar.active {
   transform: translateX(0);
@@ -120,8 +127,7 @@ body.sidebar-open #feed {
   display: block;
 }
 
-/* Push main feed content to the right when sidebar is open (optional) */
-body.sidebar-open #feed {
+.sidebar-open #feed {
   margin-left: 280px;
   transition: margin-left 0.3s ease;
 }
@@ -198,7 +204,11 @@ button[type="submit"] {
   display: none;
 }
 #feed {
-  display: block;
+  display: block !important;
+  min-height: 100px;
+  background: #f9f9f9;
+  z-index: 800;
+  position: relative;
 }
 .modal {
   display: none;
@@ -248,7 +258,7 @@ button[type="submit"] {
   margin-top: 20px;
   width: 100%;
   justify-items: center; /* Centers cards horizontally in their grid cells */
-  align-items: start;
+  align-items: center;
 }
 
 .profile-card {
