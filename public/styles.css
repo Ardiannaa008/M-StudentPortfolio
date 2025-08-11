@@ -230,16 +230,19 @@ button[type="submit"] {
   margin: 0 auto;
   padding: 20px;
 }
-.university-section h2 {
-  font-size: 1.5rem;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
+.university-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto; /* centers the section on page */
+  padding: 20px;
 }
 .card-group {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 20px;
+  width: 100%;
+  justify-items: center; /* centers cards in their grid cells */
 }
 
 /* PROFILE CARD */
