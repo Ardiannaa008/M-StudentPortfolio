@@ -45,6 +45,32 @@
 
         <input type="checkbox" id="fon" name="filterUniversity" value="FON" hidden />
         <label for="fon">FON</label>
+
+        <input type="checkbox" id="ust" name="filterUniversity" value="UST" hidden />
+        <label for="ust">UST</label>
+
+        <input type="checkbox" id="uist" name="filterUniversity" value="UIST" hidden />
+        <label for="uist">UIST</label>
+
+        <input type="checkbox" id="uklo" name="filterUniversity" value="UKLO" hidden />
+        <label for="uklo">UKLO</label>
+
+        <input type="checkbox" id="european-university" name="filterUniversity" value="European University" hidden />
+        <label for="european-university">European University</label>
+
+        <input type="checkbox" id="mother-theresa" name="filterUniversity" value="Mother Teresa University" hidden />
+        <label for="mother-theresa">Mother Teresa University</label>
+
+        <input type="checkbox" id="auds" name="filterUniversity" value="AUDS" hidden />
+        <label for="auds">AUDS</label>
+
+        <input type="checkbox" id="international-balkan" name="filterUniversity" value="International Balkan University" hidden />
+        <label for="international-balkan">International Balkan University</label>
+
+        <input type="checkbox" id="other" name="filterUniversity" value="Other" hidden />
+        <label for="other">Other</label>
+
+
       </div>
     </div>
 
@@ -72,7 +98,14 @@
         <label for="year4">4th Year</label>
       </div>
     </div>
+      <div class="filter-actions">
+  <button id="applyFiltersBtn">Apply Filters</button>
+  <button id="clearFiltersBtn">Clear Filters</button>
+</div>
   </div>
+
+
+
 
   <!-- Sidebar Backdrop -->
   <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
@@ -93,23 +126,23 @@
         <label for="university">University *</label>
         <select id="university" name="university" required>
           <option value="">Select your university</option>
-          <option>Ss. Cyril and Methodius University in Skopje</option>
-          <option>Goce Delčev University of Štip</option>
-          <option>St. Clement of Ohrid University of Bitola</option>
-          <option>State University of Tetova</option>
-          <option>University of Information Science & Technology "St. Paul the Apostle"</option>
-          <option>South East European University</option>
-          <option>International Balkan University</option>
-          <option>FON University</option>
-          <option>University American College Skopje</option>
-          <option>European University – Republic of Macedonia</option>
-          <option>Euro-Balkan University</option>
-          <option>International University of Struga</option>
-          <option>MIT University Skopje</option>
-          <option>University for Tourism and Management</option>
-          <option>University for Audiovisual Arts / ESRA</option>
-          <option>Business Academy Smilevski</option>
-          <option>Eurocollege Kumanovo</option>
+          <option value="UKIM">Ss. Cyril and Methodius University in Skopje</option>
+          <option value="UGD">Goce Delčev University of Štip</option>
+          <option value="UKLO">St. Clement of Ohrid University of Bitola</option>
+          <option value="UNT">State University of Tetova</option>
+          <option value="UIST">University of Information Science & Technology "St. Paul the Apostle"</option>
+          <option value="SEEU">South East European University</option>
+          <option value="IBU">International Balkan University</option>
+          <option value="FON">FON University</option>
+          <option value="UACS">University American College Skopje</option>
+          <option value="EURM">European University – Republic of Macedonia</option>
+          <option value="EBU">Euro-Balkan University</option>
+          <option value="IUS">International University of Struga</option>
+          <option value="MIT">MIT University Skopje</option>
+          <option value="UTM">University for Tourism and Management</option>
+          <option value="ESRA">University for Audiovisual Arts / ESRA</option>
+          <option value="BAS">Business Academy Smilevski</option>
+          <option value="ECK">Eurocollege Kumanovo</option>
         </select>
 
         <label for="program">Study Program *</label>
@@ -118,10 +151,10 @@
         <label for="year">Year of Study</label>
         <select id="year" name="year">
           <option value="">Choose year...</option>
-          <option>1 year</option>
-          <option>2 year</option>
-          <option>3 year</option>
-          <option>4 year</option>
+          <option value="1">1 year</option>
+          <option value="2">2 year</option>
+          <option value="3">3 year</option>
+          <option value="4">4 year</option>
         </select>
 
         <label for="skills">Skills</label>

@@ -13,6 +13,7 @@ const backdrop = document.createElement('div');
 backdrop.className = 'sidebar-backdrop';
 document.body.appendChild(backdrop);
 
+
 function toggleSidebar() {
   const isActive = sidebar.classList.toggle('active');
   body.classList.toggle('sidebar-open', isActive);
@@ -253,6 +254,8 @@ function renderProgramOptions(filterText = '') {
     });
 }
 
+
+
 function resetFilters() {
   document.querySelectorAll('.program-option.selected').forEach(el => el.classList.remove('selected'));
   document.querySelectorAll('input[name="filterUniversity"]').forEach(checkbox => checkbox.checked = false);
@@ -288,6 +291,9 @@ function filterCards() {
     card.style.display = (matchesProgram && matchesUniversity && matchesYear && matchesSearch) ? 'block' : 'none';
   });
 }
+
+
+
 
 programSearchInput.addEventListener('input', (e) => {
   renderProgramOptions(e.target.value);
