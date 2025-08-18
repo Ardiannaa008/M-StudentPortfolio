@@ -109,11 +109,18 @@ function addCardToFeed(data) {
     createUniversitySection(university);
   }
 
+  const uniOption = document.querySelector(`#university option[value="${university}"]`);
+  const yearOption = document.querySelector(`#year option[value="${year}"]`);
+
+  const universityDisplay = uniOption ? uniOption.textContent : university;
+  const yearDisplay = yearOption ? yearOption.textContent : year;
+
   const card = document.createElement('div');
   card.className = 'profile-card';
   card.dataset.id = id;
   card.dataset.university = university;
   card.dataset.year = year;
+  card.dataset.program = program;
 
   card.innerHTML = `
     <div class="card-header">
