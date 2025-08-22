@@ -120,7 +120,7 @@ function addCardToFeed(data) {
   card.className = 'profile-card';
   card.dataset.id = id;
   card.dataset.university = university;
-  card.dataset.year = year;
+  card.dataset.year = yearDisplay;
   card.dataset.program = program;
 
   card.innerHTML = `
@@ -288,12 +288,12 @@ function filterCards() {
   cards.forEach(card => {
     const program = card.querySelector('.title')?.textContent?.trim();
     const university = card.dataset.university;
-    const year = card.dataset.year;
+    const year = card.dataset.yearDisplay;
     const name = card.querySelector('.portfolio-name')?.textContent?.toLowerCase() || '';
 
     const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(program);
     const matchesUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(university);
-    const matchesYear = selectedYears.length === 0 || selectedYears.includes(year); 
+    const matchesYear = selectedYears.length === 0 || selectedYears.includes(yearDisplay); 
 
     const matchesSearch = searchTerm === '' || name.includes(searchTerm);
 
