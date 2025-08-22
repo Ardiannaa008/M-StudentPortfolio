@@ -115,11 +115,12 @@ function addCardToFeed(data) {
   const universityDisplay = uniOption ? uniOption.textContent : university;
   const yearDisplay = yearOption ? yearOption.textContent : year;
 
+
   const card = document.createElement('div');
   card.className = 'profile-card';
   card.dataset.id = id;
   card.dataset.university = university;
-  card.dataset.year = year;
+  card.dataset.year = yearDisplay;
   card.dataset.program = program;
 
   card.innerHTML = `
@@ -292,7 +293,8 @@ function filterCards() {
 
     const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(program);
     const matchesUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(university);
-    const matchesYear = selectedYears.length === 0 || selectedYears.includes(String(year));
+    const matchesYear = selectedYears.length === 0 || selectedYears.includes(year); 
+
     const matchesSearch = searchTerm === '' || name.includes(searchTerm);
 
     card.style.display = (matchesProgram && matchesUniversity && matchesYear && matchesSearch) ? 'block' : 'none';
