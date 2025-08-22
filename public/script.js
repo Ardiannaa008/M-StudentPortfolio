@@ -290,9 +290,11 @@ function filterCards() {
     const year = card.dataset.year;
     const name = card.querySelector('.portfolio-name')?.textContent?.toLowerCase() || '';
 
-    const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(program);
-    const matchesUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(university);
-    const matchesYear = selectedYears.length === 0 || selectedYears.includes(year);
+    const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(program?.toString());
+    const matchesUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(university?.toString());
+
+    const matchesYear = selectedYears.length === 0 || selectedYears.includes(String(year));
+
     const matchesSearch = searchTerm === '' || name.includes(searchTerm);
 
     card.style.display = (matchesProgram && matchesUniversity && matchesYear && matchesSearch) ? 'block' : 'none';
