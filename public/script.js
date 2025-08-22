@@ -132,7 +132,7 @@ function addCardToFeed(data) {
       <p class="title">${escapeHTML(program)}</p>
       <p class="meta">
         <span>🏫 ${escapeHTML(university)}</span> &nbsp;|&nbsp;
-        <span>📅 ${escapeHTML(year)}</span>
+        <span>📅 ${escapeHTML(yearDisplay)}</span>
       </p>
       <p class="bio">${escapeHTML(bio)}</p>
       ${skills ? `
