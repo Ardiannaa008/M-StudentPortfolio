@@ -110,10 +110,11 @@ app.get("/api/cards", async (req, res) => {
     const cards = await Card.find().sort({ _id: -1 });
     res.json(cards);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch cards" });
+    console.error("❌ Error in GET /api/cards:", err.message, err.stack);
+    res.status(500).json({ error: err.message });
   }
 });
+
 
 app.post("/api/cards", async (req, res) => {
   try {
