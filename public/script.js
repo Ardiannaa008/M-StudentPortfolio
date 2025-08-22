@@ -120,7 +120,7 @@ function addCardToFeed(data) {
   card.className = 'profile-card';
   card.dataset.id = id;
   card.dataset.university = university;
-  card.dataset.year = yearDisplay;
+  card.dataset.year = year;
   card.dataset.program = program;
 
   card.innerHTML = `
