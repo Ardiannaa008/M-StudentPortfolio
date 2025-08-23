@@ -642,6 +642,7 @@ button[type="submit"]:active {
   bottom: -45px;
   box-shadow: var(--shadow-lg);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10000;
 }
 
 .profile-card:hover .avatar {
