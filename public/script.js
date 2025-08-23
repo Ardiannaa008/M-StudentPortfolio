@@ -120,7 +120,7 @@ function addCardToFeed(data) {
   card.className = 'profile-card';
   card.dataset.id = id;
   card.dataset.university = university;
-  card.dataset.year = yearDisplay;
+  card.dataset.year = year;
   card.dataset.program = program;
 
   card.innerHTML = `
@@ -132,7 +132,7 @@ function addCardToFeed(data) {
       <p class="title">${escapeHTML(program)}</p>
       <p class="meta">
         <span>🏫 ${escapeHTML(university)}</span> &nbsp;|&nbsp;
-        <span>📅 ${escapeHTML(yearDisplay)}</span>
+        <span>📅 ${escapeHTML(year)}</span>
       </p>
       <p class="bio">${escapeHTML(bio)}</p>
       ${skills ? `
@@ -288,12 +288,12 @@ function filterCards() {
   cards.forEach(card => {
     const program = card.querySelector('.title')?.textContent?.trim();
     const university = card.dataset.university;
-    const year = card.dataset.yearDisplay;
+    const year = card.dataset.year;
     const name = card.querySelector('.portfolio-name')?.textContent?.toLowerCase() || '';
 
     const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(program);
     const matchesUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(university);
-    const matchesYear = selectedYears.length === 0 || selectedYears.includes(yearDisplay); 
+    const matchesYear = selectedYears.length === 0 || selectedYears.includes(year); 
 
     const matchesSearch = searchTerm === '' || name.includes(searchTerm);
 
