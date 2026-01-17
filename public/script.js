@@ -1,3 +1,5 @@
+// script.js
+
 const form = document.getElementById('portfolio-form');
 const feed = document.getElementById('feed');
 const universitySections = {};
@@ -9,7 +11,9 @@ const programSearchInput = document.getElementById('program-search');
 const programOptionsContainer = document.getElementById('program-options');
 let allPrograms = new Set();
 
-// Backdrop for sidebar
+const apiBaseUrl = `${window.location.origin}/api/cards`;
+
+// Sidebar backdrop
 const backdrop = document.createElement('div');
 backdrop.className = 'sidebar-backdrop';
 document.body.appendChild(backdrop);
@@ -25,18 +29,24 @@ filterToggleBtn.addEventListener('click', (e) => {
   toggleSidebar();
   e.stopPropagation();
 });
-backdrop.addEventListener('click', (e) => {
-  if (e.target === backdrop) toggleSidebar();
+backdrop.addEventListener('click', () => toggleSidebar());
+
+// Modal
+const openFormBtn = document.getElementById('openFormBtn');
+const formModal = document.getElementById('formModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
+
+openFormBtn.addEventListener('click', () => {
+  formModal.style.display = 'block';
 });
 
-// Open/close modal
-document.querySelector('.create-btn').addEventListener('click', scrollToForm);
-function scrollToForm() {
-  document.getElementById('formModal').style.display = 'block';
-}
-function closeModal() {
-  document.getElementById('formModal').style.display = 'none';
-}
+closeModalBtn.addEventListener('click', () => {
+  formModal.style.display = 'none';
+});
+
+formModal.addEventListener('click', (e) => {
+  if (e.target === formModal) formModal.style.display = 'none';
+});
 
 // Helpers
 function escapeHTML(str) {
@@ -49,11 +59,12 @@ function escapeHTML(str) {
     "'": '&#39;'
   })[m]);
 }
+
 function isValidUrl(url) {
   return typeof url === 'string' && url.trim().startsWith('http');
 }
 
-// University section builder
+// University sections
 function createUniversitySection(name) {
   const section = document.createElement('div');
   section.className = 'university-section';
@@ -62,8 +73,8 @@ function createUniversitySection(name) {
   universitySections[name] = section.querySelector('.card-group');
 }
 
-// Submit portfolio form
-form.addEventListener('submit', async function (e) {
+// Form submission
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = new FormData(form);
   const cardData = Object.fromEntries(data.entries());
@@ -77,12 +88,12 @@ form.addEventListener('submit', async function (e) {
 
   await loadSavedCards();
   form.reset();
-  closeModal();
+  formModal.style.display = 'none';
   feed.style.display = 'block';
   feed.scrollIntoView({ behavior: 'smooth' });
 });
 
-// Add portfolio card
+// Add card
 function addCardToFeed(data) {
   if (!data || !data.fullName) return;
 
@@ -97,6 +108,7 @@ function addCardToFeed(data) {
   card.dataset.year = year;
   card.dataset.program = program;
 
+  // Build card content without inline JS
   card.innerHTML = `
     <div class="card-header">
       <div class="avatar">${escapeHTML(initials)}</div>
@@ -129,34 +141,39 @@ function addCardToFeed(data) {
         </div>
       </div>
       <div class="actions">
-        <button onclick="likeCard(this)">👍 Like</button>
-        <button onclick="commentCard(this)">💬 Comment</button>
+        <button class="like-btn">👍 Like</button>
+        <button class="comment-btn">💬 Comment</button>
       </div>
     </div>
   `;
+
   universitySections[university].prepend(card);
+
+  // Add event listeners to buttons
+  card.querySelector('.like-btn').addEventListener('click', () => likeCard(card.querySelector('.like-btn')));
+  card.querySelector('.comment-btn').addEventListener('click', () => commentCard());
 }
 
-// Allow only university emails
+// Only allow university emails
 function isValidUniversityEmail(email) {
   const allowedDomains = [
-    'ukim.edu.mk', 'ugd.edu.mk', 'uklo.edu.mk', 'unite.edu.mk', 'uist.edu.mk',
-    'seeu.edu.mk', 'ibu.edu.mk', 'fon.edu.mk', 'uacs.edu.mk', 'eurm.edu.mk',
-    'euba.edu.mk', 'eust.edu.mk', 'mit.edu.mk', 'utms.edu.mk', 'esra.com.mk',
-    'fbe.edu.mk', 'eurocollege.edu.mk'
+    'ukim.edu.mk','ugd.edu.mk','uklo.edu.mk','unite.edu.mk','uist.edu.mk',
+    'seeu.edu.mk','ibu.edu.mk','fon.edu.mk','uacs.edu.mk','eurm.edu.mk',
+    'euba.edu.mk','eust.edu.mk','mit.edu.mk','utms.edu.mk','esra.com.mk',
+    'fbe.edu.mk','eurocollege.edu.mk'
   ];
   const domain = email.split('@')[1]?.toLowerCase();
   return allowedDomains.includes(domain);
 }
 
-// Save card to backend
+// Save to backend
 async function saveCard(cardData) {
   try {
     if (!isValidUniversityEmail(cardData.email)) {
       alert('Only university emails are allowed');
       return null;
     }
-    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards', {
+    const res = await fetch(apiBaseUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cardData),
@@ -173,7 +190,7 @@ async function saveCard(cardData) {
 // Load saved cards
 async function loadSavedCards() {
   try {
-    const res = await fetch('https://m-studentportfolio-server.onrender.com/api/cards');
+    const res = await fetch(apiBaseUrl);
     if (!res.ok) throw new Error('Failed to fetch cards');
     const cards = await res.json();
 
@@ -197,6 +214,7 @@ function buildProgramFilters() {
   });
   renderProgramOptions();
 }
+
 function renderProgramOptions(filterText = '') {
   const selected = new Set(
     Array.from(document.querySelectorAll('.program-option.selected')).map(el => el.textContent.trim())
@@ -217,7 +235,7 @@ function renderProgramOptions(filterText = '') {
     });
 }
 
-// Reset filters
+// Filters
 function resetFilters() {
   document.querySelectorAll('.program-option.selected').forEach(el => el.classList.remove('selected'));
   document.querySelectorAll('input[name="filterUniversity"]').forEach(cb => cb.checked = false);
@@ -227,7 +245,6 @@ function resetFilters() {
   document.querySelectorAll('.profile-card').forEach(card => card.style.display = 'block');
 }
 
-// Apply filters
 function filterCards() {
   const selectedPrograms = Array.from(document.querySelectorAll('.program-option.selected')).map(el => el.textContent.trim());
   const selectedUniversities = Array.from(document.querySelectorAll('input[name="filterUniversity"]:checked')).map(el => el.value);
@@ -249,8 +266,8 @@ function filterCards() {
   });
 }
 
-// Filter listeners
-programSearchInput.addEventListener('input', (e) => renderProgramOptions(e.target.value));
+// Event listeners for filters
+programSearchInput.addEventListener('input', e => renderProgramOptions(e.target.value));
 searchInput.addEventListener('input', filterCards);
 document.querySelectorAll('input[name="filterUniversity"], input[name="filterYear"]').forEach(cb => {
   cb.addEventListener('change', filterCards);
@@ -268,4 +285,5 @@ function commentCard() {
   if (comment) alert(`You said: ${comment}`);
 }
 
+// Load cards on page load
 window.addEventListener('DOMContentLoaded', loadSavedCards);
