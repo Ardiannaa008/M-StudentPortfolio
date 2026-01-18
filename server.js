@@ -45,7 +45,18 @@ app.use(express.json());
 
 // ✅ Content Security Policy updated for Font Awesome CDN
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
+  res.setHeader(
+  "Content-Security-Policy",
+  [
+    "default-src 'self'",
+    "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com",
+    "script-src 'self'",
+    "img-src 'self' data: https:",
+    "connect-src 'self'"
+  ].join("; ")
+);
+
   next();
 });
 
