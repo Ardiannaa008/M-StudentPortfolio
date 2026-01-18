@@ -171,25 +171,41 @@ function isValidUniversityEmail(email) {
 }
 
 // Save to backend
+// Save to backend
 async function saveCard(cardData) {
   try {
+    // --- FRONTEND VALIDATION ---
     if (!isValidUniversityEmail(cardData.email)) {
-      alert('Only university emails are allowed');
-      return null;
+      alert('❌ Please use your university email to create a portfolio.');
+
+      // Focus and highlight email input
+      const emailInput = document.getElementById('email');
+      emailInput.focus();
+      emailInput.style.border = '2px solid red';
+      setTimeout(() => {
+        emailInput.style.border = ''; // reset border after 3s
+      }, 3000);
+
+      return null; // stop submission
     }
+
+    // --- SEND TO BACKEND ---
     const res = await fetch(apiBaseUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cardData),
     });
+
     const responseData = await res.json();
     if (!res.ok) throw new Error(responseData.error || 'Failed to save card');
     return responseData;
-  } catch {
-    alert('Failed to save portfolio. Please try again later.');
+
+  } catch (err) {
+    alert(`⚠ Failed to save portfolio: ${err.message}`);
     return null;
   }
 }
+
 
 // Load saved cards
 async function loadSavedCards() {
