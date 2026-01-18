@@ -11,7 +11,11 @@ const programSearchInput = document.getElementById('program-search');
 const programOptionsContainer = document.getElementById('program-options');
 let allPrograms = new Set();
 
-const apiBaseUrl = `${window.location.origin}/api/cards`;
+// script.js
+
+const apiBaseUrl = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000/api/cards'  // local development
+  : 'https://m-studentportfolio-server.onrender.com/api/cards'; // deployed backend
 
 // Sidebar backdrop
 const backdrop = document.createElement('div');

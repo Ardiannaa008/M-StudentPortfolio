@@ -126,10 +126,11 @@ app.post("/api/cards", async (req, res) => {
     const savedCard = await newCard.save();
     res.status(201).json(savedCard);
   } catch (err) {
-    console.error("Error saving card:", err);
-    res.status(500).json({ error: "Failed to save card" });
+    console.error("Error saving card:", err);  // <- this will show exact error
+    res.status(500).json({ error: err.message });
   }
 });
+
 
 // Fallback route to serve index.html
 app.get(/.*/, (req, res) => {
