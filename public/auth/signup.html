@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - MStudentPortfolio</title>
+  <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+        extend: {
+            colors: {
+            primary: '#7c3aed',      // main purple
+            'primary-dark': '#5b21b6',
+            accent: '#a78bfa',
+            glow: '#c084fc',
+            darkbg: '#0f0e17',
+            darkerbg: '#06050d',
+            textprimary: '#f1f5f9',
+            textsecondary: '#cbd5e1'
+            },
+            fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif']
+            }
+        }
+        }
+    }
+    </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #5b21b6;
+      --accent: #a78bfa;
+      --glow: #c084fc;
+      --dark-bg: #0f0e17;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --glass: rgba(30,27,75,0.65);
+      --border: rgba(124,58,237,0.3);
+      --glow-shadow: 0 0 20px rgba(124,58,237,0.45);
+    }
+    body { font-family: 'Space Grotesk', sans-serif; background: var(--dark-bg); color: var(--text-primary); }
+    .glass { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--border); }
+    .glow-hover:hover { box-shadow: var(--glow-shadow); transform: translateY(-3px); }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen px-4">
+
+  <div class="glass rounded-3xl p-10 w-full max-w-md text-center">
+    <h1 class="text-3xl font-bold mb-6 text-[var(--accent)]">Create Account</h1>
+    <p class="text-[var(--text-secondary)] mb-8">Sign up with your university email to get started.</p>
+
+    <form id="signupForm" class="flex flex-col gap-5">
+      <select id="university" required class="p-4 rounded-xl bg-black/20 border border-[var(--border)] text-[var(--text-primary)] focus:outline-none">
+        <option value="">Select Your University</option>
+        <option value="UKIM">UKIM</option>
+        <option value="UGD">UGD</option>
+        <option value="UKLO">UKLO</option>
+        <option value="SEEU">SEEU</option>
+        <option value="AUE">American University of Europe</option>
+      </select>
+
+      <input type="email" id="email" placeholder="University Email" required
+             class="p-4 rounded-xl bg-black/20 border border-[var(--border)] text-[var(--text-primary)] focus:outline-none" />
+      <input type="password" id="password" placeholder="Password" required
+             class="p-4 rounded-xl bg-black/20 border border-[var(--border)] text-[var(--text-primary)] focus:outline-none" />
+
+      <p id="error" class="text-red-400 text-sm"></p>
+
+      <button type="submit" class="px-6 py-4 bg-[var(--primary)] text-white font-medium rounded-xl glow-hover transition">
+        Sign Up
+      </button>
+    </form>
+
+    <p class="mt-6 text-[var(--text-secondary)]">
+      Already have an account?
+      <a href="signin.html" class="text-[var(--accent)] hover:underline">Sign In</a>
+    </p>
+  </div>
+
+  <script type="module" src="auth.js"></script>
+
+</body>
+</html>

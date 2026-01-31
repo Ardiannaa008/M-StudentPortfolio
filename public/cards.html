@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="M-StudentPortfolio helps students connect easily and showcase their portfolios.">
+
+  <title>MSPortfolio</title>
+
+  <!-- Styles -->
+  
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Student Portfolio Showcase</h1>
+    <p>Discover amazing student projects, connect with peers, and showcase your own work to the world.</p>
+    <button class="create-btn" id="openFormBtn">+ Create Your Portfolio</button>
+  </div>
+
+  <!-- Search & Filter Button -->
+  <div class="search-filters">
+    <input type="text" id="searchInput" placeholder="Search by name..." aria-label="Search by name" />
+    <button id="filter-toggle" aria-expanded="false" aria-controls="sidebar" aria-label="Toggle filters">
+      <i class="fas fa-filter"></i> Filters
+    </button>
+  </div>
+
+  <!-- Sidebar Filters -->
+  <div id="sidebar" class="sidebar">
+    <h3>Filter by:</h3>
+
+    <!-- University Filter -->
+    <div class="filter-group">
+      <h4>University</h4>
+      <div class="button-checkboxes">
+        <input type="checkbox" id="ukim" name="filterUniversity" value="Ss. Cyril and Methodius University in Skopje" hidden />
+        <label for="ukim">Ss. Cyril and Methodius University in Skopje</label>
+
+        <input type="checkbox" id="ugd" name="filterUniversity" value="UGD" hidden />
+        <label for="ugd">Goce Delčev University of Štip</label>
+
+        <input type="checkbox" id="uklo" name="filterUniversity" value="UKLO" hidden />
+        <label for="uklo">St. Clement of Ohrid University of Bitola</label>
+
+        <input type="checkbox" id="unt" name="filterUniversity" value="UNT" hidden />
+        <label for="unt">State University of Tetova</label>
+
+        <input type="checkbox" id="uist" name="filterUniversity" value="UIST" hidden />
+        <label for="uist">University of Information Science & Technology "St. Paul the Apostle"</label>
+
+        <input type="checkbox" id="seeu" name="filterUniversity" value="SEEU" hidden />
+        <label for="seeu">South East European University</label>
+
+        <input type="checkbox" id="ibu" name="filterUniversity" value="IBU" hidden />
+        <label for="ibu">International Balkan University</label>
+
+        <input type="checkbox" id="fon" name="filterUniversity" value="FON" hidden />
+        <label for="fon">FON University</label>
+
+        <input type="checkbox" id="uacs" name="filterUniversity" value="UACS" hidden />
+        <label for="uacs">University American College Skopje</label>
+
+        <input type="checkbox" id="eurm" name="filterUniversity" value="EURM" hidden />
+        <label for="eurm">European University – Republic of Macedonia</label>
+
+        <input type="checkbox" id="ebu" name="filterUniversity" value="EBU" hidden />
+        <label for="ebu">Euro-Balkan University</label>
+
+        <input type="checkbox" id="ius" name="filterUniversity" value="IUS" hidden />
+        <label for="ius">International University of Struga</label>
+
+        <input type="checkbox" id="mit" name="filterUniversity" value="MIT" hidden />
+        <label for="mit">MIT University Skopje</label>
+
+        <input type="checkbox" id="utm" name="filterUniversity" value="UTM" hidden />
+        <label for="utm">University for Tourism and Management</label>
+
+        <input type="checkbox" id="esra" name="filterUniversity" value="ESRA" hidden />
+        <label for="esra">University for Audiovisual Arts / ESRA</label>
+
+        <input type="checkbox" id="bas" name="filterUniversity" value="BAS" hidden />
+        <label for="bas">Business Academy Smilevski</label>
+
+        <input type="checkbox" id="eck" name="filterUniversity" value="ECK" hidden />
+        <label for="eck">Eurocollege Kumanovo</label>
+      </div>
+    </div>
+
+    <!-- Program Filter -->
+    <div class="filter-group">
+      <h4>Program</h4>
+      <input type="text" id="program-search" placeholder="Search programs..." />
+      <div id="program-options" class="program-options-container"></div>
+    </div>
+
+    <!-- Year Filter -->
+    <div class="filter-group">
+      <h4>Year</h4>
+      <div class="button-checkboxes">
+        <input type="checkbox" id="year1" name="filterYear" value="1" hidden />
+        <label for="year1">1st Year</label>
+
+        <input type="checkbox" id="year2" name="filterYear" value="2" hidden />
+        <label for="year2">2nd Year</label>
+
+        <input type="checkbox" id="year3" name="filterYear" value="3" hidden />
+        <label for="year3">3rd Year</label>
+
+        <input type="checkbox" id="year4" name="filterYear" value="4" hidden />
+        <label for="year4">4th Year</label>
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button id="applyFiltersBtn">Apply Filters</button>
+      <button id="clearFiltersBtn">Clear Filters</button>
+    </div>
+  </div>
+
+
+
+
+  <!-- Sidebar Backdrop -->
+  <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+  <!-- Portfolio Form Modal -->
+  <div id="formModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModalBtn" aria-label="Close form">&times;</span>
+
+
+      <h2>Make your portfolio</h2>
+      <form id="portfolio-form">
+
+        <label for="fullName">Full Name *</label>
+        <input id="fullName" type="text" name="fullName" required placeholder="Enter your full name" />
+
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio" rows="3" placeholder="Short introduction about yourself"></textarea>
+
+        <label for="university">University *</label>
+        <select id="university" name="university" required>
+          <option value="">Select your university</option>
+          <option value="Ss. Cyril and Methodius University in Skopje">Ss. Cyril and Methodius University in Skopje</option>
+          <option value="UGD">Goce Delčev University of Štip</option>
+          <option value="UKLO">St. Clement of Ohrid University of Bitola</option>
+          <option value="UNT">State University of Tetova</option>
+          <option value="UIST">University of Information Science & Technology "St. Paul the Apostle"</option>
+          <option value="SEEU">South East European University</option>
+          <option value="IBU">International Balkan University</option>
+          <option value="FON">FON University</option>
+          <option value="UACS">University American College Skopje</option>
+          <option value="EURM">European University – Republic of Macedonia</option>
+          <option value="EBU">Euro-Balkan University</option>
+          <option value="IUS">International University of Struga</option>
+          <option value="MIT">MIT University Skopje</option>
+          <option value="UTM">University for Tourism and Management</option>
+          <option value="ESRA">University for Audiovisual Arts / ESRA</option>
+          <option value="BAS">Business Academy Smilevski</option>
+          <option value="ECK">Eurocollege Kumanovo</option>
+        </select>
+
+        <label for="program">Study Program *</label>
+        <input id="program" type="text" name="program" required placeholder="e.g. Computer Science" />
+
+        <label for="year">Year of Study</label>
+        <select id="year" name="year">
+          <option value="">Choose year...</option>
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+
+        <label for="skills">Skills</label>
+        <input id="skills" type="text" name="skills" placeholder="Coding, communication, math..." />
+
+        <label for="projectTitle">Project Title</label>
+        <input id="projectTitle" type="text" name="projectTitle" placeholder="Project Name" />
+
+        <label for="projectDescription">Project Description</label>
+        <textarea id="projectDescription" name="projectDescription" rows="3" placeholder="Describe your project"></textarea>
+
+        <label for="email">Email *</label>
+        <input id="email" type="email" name="email" placeholder="you@example.com" required />
+
+        <div class="form-group">
+          <label for="linkedin">LinkedIn</label>
+          <input type="url" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/yourprofile" />
+        </div>
+
+        <div class="form-group">
+          <label for="github">GitHub</label>
+          <input type="url" name="github" id="github" placeholder="https://github.com/yourusername" />
+        </div>
+
+        <div class="form-group">
+          <label for="instagram">Instagram</label>
+          <input type="url" name="instagram" id="instagram" placeholder="https://instagram.com/yourhandle" />
+        </div>
+
+        <div class="form-group">
+          <label for="twitter">Twitter/X</label>
+          <input type="url" name="twitter" id="twitter" placeholder="https://twitter.com/yourhandle" />
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Feed Section -->
+  <div id="feed"></div>
+
+  <!-- JS -->
+  <script src="script.js" defer></script>
+</body>
+</html>

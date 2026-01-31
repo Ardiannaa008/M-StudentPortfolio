@@ -10,12 +10,22 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "**M-StudentPortfolio** is a web platform that allows university students worldwide to create and share their personal mini portfolios. It's designed to help students showcase their skills and interests, connect with peers from the same or different universities, and build a network of like-minded individuals.",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "firebase-admin": "^13.6.0",
     "mongoose": "^8.17.0",
     "sanitize-html": "^2.17.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ardiannaa008/M-StudentPortfolio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ardiannaa008/M-StudentPortfolio/issues"
+  },
+  "homepage": "https://github.com/Ardiannaa008/M-StudentPortfolio#readme"
 }

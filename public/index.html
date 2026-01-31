@@ -1,224 +1,255 @@
 <!DOCTYPE html>
-<html lang="mk">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="M-StudentPortfolio helps students connect easily and showcase their portfolios.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MStudentPortfolio - Showcase Your Student Journey</title>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+        extend: {
+            colors: {
+            primary: '#7c3aed',      // main purple
+            'primary-dark': '#5b21b6',
+            accent: '#a78bfa',
+            glow: '#c084fc',
+            darkbg: '#0f0e17',
+            darkerbg: '#06050d',
+            textprimary: '#f1f5f9',
+            textsecondary: '#cbd5e1'
+            },
+            fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif']
+            }
+        }
+        }
+    }
+    </script>
 
-  <title>MSPortfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;      /* violet/purple main */
+            --primary-dark: #5b21b6;
+            --accent: #a78bfa;       /* lighter purple */
+            --glow: #c084fc;
+            --navy: #1e1b4b;
+            --dark-bg: #0f0e17;
+            --darker-bg: #06050d;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --glass: rgba(30, 27, 75, 0.65);
+            --border: rgba(124, 58, 237, 0.3);
+            --glow-shadow: 0 0 20px rgba(124, 58, 237, 0.45);
+        }
 
-  <!-- Styles -->
-  
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+        }
 
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+        }
+
+        .glow-hover:hover {
+            box-shadow: var(--glow-shadow);
+            transform: translateY(-3px);
+        }
+
+        section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .subtle-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .nav-active {
+            color: var(--accent) !important;
+            position: relative;
+        }
+        .nav-active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--glow);
+        }
+    </style>
 </head>
+<body class="relative overflow-x-hidden">
 
-<body>
+    <div class="subtle-grid"></div>
 
-  <!-- Hero Section -->
-  <div class="hero">
-    <h1>Student Portfolio Showcase</h1>
-    <p>Discover amazing student projects, connect with peers, and showcase your own work to the world.</p>
-    <button class="create-btn" id="openFormBtn">+ Create Your Portfolio</button>
-  </div>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-bold text-white tracking-tight">MStudentPortfolio</span>
+            </div>
 
-  <!-- Search & Filter Button -->
-  <div class="search-filters">
-    <input type="text" id="searchInput" placeholder="Search by name..." aria-label="Search by name" />
-    <button id="filter-toggle" aria-expanded="false" aria-controls="sidebar" aria-label="Toggle filters">
-      <i class="fas fa-filter"></i> Filters
-    </button>
-  </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home" class="nav-link text-[var(--text-secondary)] hover:text-[var(--accent)] transition">Home</a>
+                <a href="#about" class="nav-link text-[var(--text-secondary)] hover:text-[var(--accent)] transition">About</a>
+                <a href="#features" class="nav-link text-[var(--text-secondary)] hover:text-[var(--accent)] transition">Features</a>
+                
+                <a href="#contact" class="nav-link text-[var(--text-secondary)] hover:text-[var(--accent)] transition">Contact</a>
+                <div class="flex gap-4">
+                    <a href="auth/signin.html"
+                       class="px-5 py-2 rounded-lg border border-[var(--accent)]/50 text-[var(--accent)] hover:bg-[var(--accent)]/10 transition">
+                        Log in
+                    </a>
+                    <a href="auth/signup.html"
+                       class="px-6 py-2 rounded-lg bg-[var(--primary)] text-white font-medium hover:bg-[var(--primary-dark)] transition glow-hover">
+                        Get Started
+                    </a>
+                </div>
+            </div>
 
-  <!-- Sidebar Filters -->
-  <div id="sidebar" class="sidebar">
-    <h3>Filter by:</h3>
-
-    <!-- University Filter -->
-    <div class="filter-group">
-      <h4>University</h4>
-      <div class="button-checkboxes">
-        <input type="checkbox" id="ukim" name="filterUniversity" value="Ss. Cyril and Methodius University in Skopje" hidden />
-        <label for="ukim">Ss. Cyril and Methodius University in Skopje</label>
-
-        <input type="checkbox" id="ugd" name="filterUniversity" value="UGD" hidden />
-        <label for="ugd">Goce Delčev University of Štip</label>
-
-        <input type="checkbox" id="uklo" name="filterUniversity" value="UKLO" hidden />
-        <label for="uklo">St. Clement of Ohrid University of Bitola</label>
-
-        <input type="checkbox" id="unt" name="filterUniversity" value="UNT" hidden />
-        <label for="unt">State University of Tetova</label>
-
-        <input type="checkbox" id="uist" name="filterUniversity" value="UIST" hidden />
-        <label for="uist">University of Information Science & Technology "St. Paul the Apostle"</label>
-
-        <input type="checkbox" id="seeu" name="filterUniversity" value="SEEU" hidden />
-        <label for="seeu">South East European University</label>
-
-        <input type="checkbox" id="ibu" name="filterUniversity" value="IBU" hidden />
-        <label for="ibu">International Balkan University</label>
-
-        <input type="checkbox" id="fon" name="filterUniversity" value="FON" hidden />
-        <label for="fon">FON University</label>
-
-        <input type="checkbox" id="uacs" name="filterUniversity" value="UACS" hidden />
-        <label for="uacs">University American College Skopje</label>
-
-        <input type="checkbox" id="eurm" name="filterUniversity" value="EURM" hidden />
-        <label for="eurm">European University – Republic of Macedonia</label>
-
-        <input type="checkbox" id="ebu" name="filterUniversity" value="EBU" hidden />
-        <label for="ebu">Euro-Balkan University</label>
-
-        <input type="checkbox" id="ius" name="filterUniversity" value="IUS" hidden />
-        <label for="ius">International University of Struga</label>
-
-        <input type="checkbox" id="mit" name="filterUniversity" value="MIT" hidden />
-        <label for="mit">MIT University Skopje</label>
-
-        <input type="checkbox" id="utm" name="filterUniversity" value="UTM" hidden />
-        <label for="utm">University for Tourism and Management</label>
-
-        <input type="checkbox" id="esra" name="filterUniversity" value="ESRA" hidden />
-        <label for="esra">University for Audiovisual Arts / ESRA</label>
-
-        <input type="checkbox" id="bas" name="filterUniversity" value="BAS" hidden />
-        <label for="bas">Business Academy Smilevski</label>
-
-        <input type="checkbox" id="eck" name="filterUniversity" value="ECK" hidden />
-        <label for="eck">Eurocollege Kumanovo</label>
-      </div>
-    </div>
-
-    <!-- Program Filter -->
-    <div class="filter-group">
-      <h4>Program</h4>
-      <input type="text" id="program-search" placeholder="Search programs..." />
-      <div id="program-options" class="program-options-container"></div>
-    </div>
-
-    <!-- Year Filter -->
-    <div class="filter-group">
-      <h4>Year</h4>
-      <div class="button-checkboxes">
-        <input type="checkbox" id="year1" name="filterYear" value="1" hidden />
-        <label for="year1">1st Year</label>
-
-        <input type="checkbox" id="year2" name="filterYear" value="2" hidden />
-        <label for="year2">2nd Year</label>
-
-        <input type="checkbox" id="year3" name="filterYear" value="3" hidden />
-        <label for="year3">3rd Year</label>
-
-        <input type="checkbox" id="year4" name="filterYear" value="4" hidden />
-        <label for="year4">4th Year</label>
-      </div>
-    </div>
-    <div class="filter-actions">
-      <button id="applyFiltersBtn">Apply Filters</button>
-      <button id="clearFiltersBtn">Clear Filters</button>
-    </div>
-  </div>
-
-
-
-
-  <!-- Sidebar Backdrop -->
-  <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
-
-  <!-- Portfolio Form Modal -->
-  <div id="formModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModalBtn" aria-label="Close form">&times;</span>
-
-
-      <h2>Make your portfolio</h2>
-      <form id="portfolio-form">
-
-        <label for="fullName">Full Name *</label>
-        <input id="fullName" type="text" name="fullName" required placeholder="Enter your full name" />
-
-        <label for="bio">Bio</label>
-        <textarea id="bio" name="bio" rows="3" placeholder="Short introduction about yourself"></textarea>
-
-        <label for="university">University *</label>
-        <select id="university" name="university" required>
-          <option value="">Select your university</option>
-          <option value="Ss. Cyril and Methodius University in Skopje">Ss. Cyril and Methodius University in Skopje</option>
-          <option value="UGD">Goce Delčev University of Štip</option>
-          <option value="UKLO">St. Clement of Ohrid University of Bitola</option>
-          <option value="UNT">State University of Tetova</option>
-          <option value="UIST">University of Information Science & Technology "St. Paul the Apostle"</option>
-          <option value="SEEU">South East European University</option>
-          <option value="IBU">International Balkan University</option>
-          <option value="FON">FON University</option>
-          <option value="UACS">University American College Skopje</option>
-          <option value="EURM">European University – Republic of Macedonia</option>
-          <option value="EBU">Euro-Balkan University</option>
-          <option value="IUS">International University of Struga</option>
-          <option value="MIT">MIT University Skopje</option>
-          <option value="UTM">University for Tourism and Management</option>
-          <option value="ESRA">University for Audiovisual Arts / ESRA</option>
-          <option value="BAS">Business Academy Smilevski</option>
-          <option value="ECK">Eurocollege Kumanovo</option>
-        </select>
-
-        <label for="program">Study Program *</label>
-        <input id="program" type="text" name="program" required placeholder="e.g. Computer Science" />
-
-        <label for="year">Year of Study</label>
-        <select id="year" name="year">
-          <option value="">Choose year...</option>
-          <option value="1">1st Year</option>
-          <option value="2">2nd Year</option>
-          <option value="3">3rd Year</option>
-          <option value="4">4th Year</option>
-        </select>
-
-        <label for="skills">Skills</label>
-        <input id="skills" type="text" name="skills" placeholder="Coding, communication, math..." />
-
-        <label for="projectTitle">Project Title</label>
-        <input id="projectTitle" type="text" name="projectTitle" placeholder="Project Name" />
-
-        <label for="projectDescription">Project Description</label>
-        <textarea id="projectDescription" name="projectDescription" rows="3" placeholder="Describe your project"></textarea>
-
-        <label for="email">Email *</label>
-        <input id="email" type="email" name="email" placeholder="you@example.com" required />
-
-        <div class="form-group">
-          <label for="linkedin">LinkedIn</label>
-          <input type="url" name="linkedin" id="linkedin" placeholder="https://linkedin.com/in/yourprofile" />
+            <!-- Mobile menu button (placeholder - you can expand later) -->
+            <button class="md:hidden text-[var(--accent)]">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
         </div>
+    </nav>
 
-        <div class="form-group">
-          <label for="github">GitHub</label>
-          <input type="url" name="github" id="github" placeholder="https://github.com/yourusername" />
+    <!-- Hero / Home -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white">
+                MStudentPortfolio
+            </h1>
+            <p class="text-xl md:text-2xl text-[var(--text-secondary)] max-w-4xl mx-auto mb-12">
+                Create your professional student portfolio.<br>
+                Showcase your projects, connect with others, and get noticed.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="auth/signup.html"
+                   class="px-10 py-5 text-xl rounded-xl bg-[var(--primary)] text-white font-medium hover:bg-[var(--primary-dark)] transition glow-hover">
+                    Create your card for FREE
+                </a>
+                <a href="auth/signin.html"
+                   class="px-10 py-5 text-xl rounded-xl border-2 border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)]/10 transition">
+                    Sign In
+                </a>
+            </div>
         </div>
+    </section>
 
-        <div class="form-group">
-          <label for="instagram">Instagram</label>
-          <input type="url" name="instagram" id="instagram" placeholder="https://instagram.com/yourhandle" />
+    <!-- About -->
+    <section id="about" class="py-24">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h2 class="text-5xl font-bold mb-12 text-white">About MStudentPortfolio</h2>
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="glass p-10 rounded-2xl">
+                    <h3 class="text-3xl font-semibold mb-6 text-[var(--accent)]">Our Mission</h3>
+                    <p class="text-lg text-[var(--text-secondary)]">
+                        We help students present their academic journey, projects and skills in a professional way — easily, beautifully and for free.
+                    </p>
+                </div>
+                <div class="glass p-10 rounded-2xl">
+                    <h3 class="text-3xl font-semibold mb-6 text-[var(--accent)]">Why Us?</h3>
+                    <p class="text-lg text-[var(--text-secondary)]">
+                        Modern design • Simple editor • Community discovery • No hidden fees • Built for students by students.
+                    </p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="form-group">
-          <label for="twitter">Twitter/X</label>
-          <input type="url" name="twitter" id="twitter" placeholder="https://twitter.com/yourhandle" />
+    <!-- Features -->
+    <section id="features" class="py-24 bg-black/30">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-16 text-white">Features</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-2xl glow-hover">
+                    <h3 class="text-2xl font-semibold mb-4 text-[var(--accent)]">Easy Portfolio Builder</h3>
+                    <p class="text-[var(--text-secondary)]">Create and customize your portfolio with drag & drop simplicity.</p>
+                </div>
+                <div class="glass p-8 rounded-2xl glow-hover">
+                    <h3 class="text-2xl font-semibold mb-4 text-[var(--accent)]">Project Showcase</h3>
+                    <p class="text-[var(--text-secondary)]">Add images, descriptions, links, technologies — show your best work.</p>
+                </div>
+                <div class="glass p-8 rounded-2xl glow-hover">
+                    <h3 class="text-2xl font-semibold mb-4 text-[var(--accent)]">Discover Others</h3>
+                    <p class="text-[var(--text-secondary)]">Browse inspiring student portfolios by field, university, year.</p>
+                </div>
+                <div class="glass p-8 rounded-2xl glow-hover">
+                    <h3 class="text-2xl font-semibold mb-4 text-[var(--accent)]">Community Interaction</h3>
+                    <p class="text-[var(--text-secondary)]">Follow, comment, collaborate with fellow students.</p>
+                </div>
+                <div class="glass p-8 rounded-2xl glow-hover">
+                    <h3 class="text-2xl font-semibold mb-4 text-[var(--accent)]">Clean & Modern Design</h3>
+                    <p class="text-[var(--text-secondary)]">Your portfolio looks professional on every device.</p>
+                </div>
+                <div class="glass p-8 rounded-2xl glow-hover">
+                    <h3 class="text-2xl font-semibold mb-4 text-[var(--accent)]">Quick & Secure</h3>
+                    <p class="text-[var(--text-secondary)]">Sign up in seconds, your data stays safe.</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  </div>
 
-  <!-- Feed Section -->
-  <div id="feed"></div>
+    <!-- Contact -->
+    <section id="contact" class="py-24 bg-black/30">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h2 class="text-5xl font-bold mb-12 text-white">Get in Touch</h2>
+            <p class="text-xl text-[var(--text-secondary)] mb-10 max-w-3xl mx-auto">
+                Have questions or suggestions? We'd love to hear from you!
+            </p>
+            <a href="mailto:hello@mstudentportfolio.com"
+               class="inline-block px-12 py-6 text-xl rounded-xl bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] transition glow-hover">
+                Contact Us
+            </a>
+        </div>
+    </section>
 
-  <!-- JS -->
-  <script src="script.js" defer></script>
+    <!-- Footer -->
+    <footer class="py-12 text-center text-[var(--text-secondary)] border-t border-[var(--border)]/30">
+        <div class="max-w-7xl mx-auto px-6">
+            <p>© 2026 MStudentPortfolio • Made with passion for students</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple section fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.08 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
 </body>
 </html>
